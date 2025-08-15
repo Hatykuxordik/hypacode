@@ -78,9 +78,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SmoothScrollProvider>
-            <div className="min-h-screen flex flex-col">
+            <div className="min-h-screen bg-background text-foreground">
               <Header />
-              <main className="flex-1">{children}</main>
+              <main className="pt-16">{children}</main>
               <Footer />
             </div>
             <FloatingAIAssistant />

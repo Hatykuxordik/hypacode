@@ -14,7 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { organizationSchema, personSchema, websiteSchema } from "@/lib/json-ld";
-import { SocialIcon } from "@/components/social-icon";
+import { SocialIcon } from "@/components/ui/social-icon";
 
 export const dynamic = "force-static";
 
@@ -45,22 +45,21 @@ export default function HomePage() {
 
       {/* Hero Section */}
       {/* <AnimatedSection>
-        <Section className="py-20 px-4 sm:px-6 lg:px-8">
+        <Section className="pt-20 pb-16">
           <div className="text-center">
-            <StaggeredText
+            <StaggeredText 
               text="Frontend Developer"
               className="text-4xl md:text-6xl font-bold mb-6"
             />
-            <StaggeredText
+            <StaggeredText 
               text="Building Modern Web Experiences"
               className="text-xl md:text-2xl text-muted-foreground mb-8"
               delay={0.2}
             />
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12">
-              Crafting responsive, user-friendly applications with React,
-              Next.js, and modern technologies
+              Crafting responsive, user-friendly applications with React, Next.js, and modern technologies
             </p>
-
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <MagneticButton>
                 <Button size="lg" asChild>
@@ -79,9 +78,9 @@ export default function HomePage() {
 
       {/* AI Project Explorer */}
       {/* <AnimatedSection delay={0.4}>
-        <Section className="py-20 px-4 sm:px-6 lg:px-8">
+        <Section className="py-20">
           <div className="text-center mb-12">
-            <StaggeredText
+            <StaggeredText 
               text="AI Project Explorer"
               className="text-3xl font-bold mb-4 flex items-center justify-center"
             />
@@ -89,12 +88,11 @@ export default function HomePage() {
               <Sparkles className="h-8 w-8 mr-3 text-primary" />
             </div>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Chat with AI to discover my projects and technical expertise. Ask
-              about specific technologies, project complexity, or anything you'd
-              like to know!
+              Chat with AI to discover my projects and technical expertise. Ask about specific technologies, 
+              project complexity, or anything you'd like to know!
             </p>
           </div>
-
+          
           <FloatingCard delay={0.6}>
             <AIProjectExplorer />
           </FloatingCard>
@@ -105,8 +103,8 @@ export default function HomePage() {
       <AnimatedSection direction="right" delay={0.2}>
         <Section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <p className="text-lg text-primary font-medium mb-2">
+            <div>
+              <p className="text-primary text-lg font-medium mb-2">
                 Hello, I&apos;m
               </p>
             </div>
@@ -115,8 +113,8 @@ export default function HomePage() {
               {/* Content */}
               <div className="space-y-6">
                 <StaggeredText
-                  text="Hypacode"
-                  className="text-4xl font-bold text-primary"
+                  text="Sodiq Atiku"
+                  className="text-6xl font-bold text-primary"
                 />
                 <h3 className="text-2xl font-semibold text-muted-foreground">
                   Frontend Developer
@@ -131,17 +129,17 @@ export default function HomePage() {
                 {/* Social Links */}
                 <div className="flex items-center space-x-4">
                   <SocialIcon
-                    href="https://github.com"
+                    href="https://github.com/hatykuxordik"
                     label="GitHub"
                     Icon={Github}
                   />
                   <SocialIcon
-                    href="https://linkedin.com"
+                    href="https://linkedin.com/in/hatykuxordik"
                     label="LinkedIn"
                     Icon={Linkedin}
                   />
                   <SocialIcon
-                    href="mailto:contact@hypacode.com"
+                    href="mailto:hatykuxordik@gmail.com"
                     label="Email"
                     Icon={Mail}
                   />
@@ -153,7 +151,10 @@ export default function HomePage() {
                     <Link href="/projects">View My Work</Link>
                   </MagneticButton>
                   <MagneticButton asChild variant="outline" size="lg">
-                    <Link href="/resume.pdf" target="_blank">
+                    <Link
+                      href="/assets/Sodiq-Atiku-Frontend-Developer-Resume-CV.pdf"
+                      target="_blank"
+                    >
                       <Download className="mr-2 h-4 w-4" />
                       Download Resume
                     </Link>
@@ -164,18 +165,18 @@ export default function HomePage() {
               {/* Profile Image */}
               <FloatingCard delay={0.4} hoverScale={1.05}>
                 <div className="relative">
-                  <div className="relative w-80 h-80 mx-auto">
+                  <div className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full" />
-                    <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
-                      3+ Years
-                    </div>
-                    <div className="absolute bottom-8 left-8 bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm font-medium">
-                      15+ Projects
-                    </div>
                     {/* Placeholder for profile image */}
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
                       <div className="text-6xl font-bold text-primary/20">
-                        H
+                        <Image
+                          src="/assets/profile.jpg"
+                          alt="Sodiq Atiku - Frontend Developer"
+                          className="rounded-full brightness-75"
+                          layout="fill"
+                          objectFit="cover"
+                        />
                       </div>
                     </div>
                   </div>
@@ -189,16 +190,19 @@ export default function HomePage() {
       {/* Stats Section */}
       <AnimatedSection delay={0.3}>
         <Section className="bg-muted/50">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {stats.map((stat, i) => (
-              <FloatingCard key={stat.label} delay={(i + 1) * 0.1}>
-                <StatsCard
-                  value={stat.value}
-                  label={stat.label}
-                  valueClassName={stat.color}
-                />
-              </FloatingCard>
-            ))}
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {stats.map((stat, i) => (
+                <FloatingCard key={stat.label} delay={(i + 1) * 0.1}>
+                  <StatsCard
+                    value={stat.value}
+                    label={stat.label}
+                    valueClassName={stat.color}
+                    className="bg-background shadow-lg"
+                  />
+                </FloatingCard>
+              ))}
+            </div>
           </div>
         </Section>
       </AnimatedSection>
