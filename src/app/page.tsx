@@ -106,7 +106,9 @@ export default function HomePage() {
         <Section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
-              <p className="text-primary font-medium mb-2">Hello, I&apos;m</p>
+              <p className="text-lg text-primary font-medium mb-2">
+                Hello, I&apos;m
+              </p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 items-center">

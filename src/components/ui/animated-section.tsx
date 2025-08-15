@@ -16,20 +16,20 @@ interface AnimatedSectionProps {
 const directionVariants = {
   up: {
     initial: { opacity: 0, y: 60 },
-    animate: { opacity: 1, y: 0 }
+    animate: { opacity: 1, y: 0 },
   },
   down: {
     initial: { opacity: 0, y: -60 },
-    animate: { opacity: 1, y: 0 }
+    animate: { opacity: 1, y: 0 },
   },
   left: {
     initial: { opacity: 0, x: 60 },
-    animate: { opacity: 1, x: 0 }
+    animate: { opacity: 1, x: 0 },
   },
   right: {
     initial: { opacity: 0, x: -60 },
-    animate: { opacity: 1, x: 0 }
-  }
+    animate: { opacity: 1, x: 0 },
+  },
 };
 
 export function AnimatedSection({
@@ -37,10 +37,11 @@ export function AnimatedSection({
   className,
   delay = 0,
   direction = "up",
-  duration = 0.6
+  duration = 0.6,
 }: AnimatedSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  console.log(isInView);
 
   const variants = directionVariants[direction];
 
@@ -52,7 +53,7 @@ export function AnimatedSection({
       transition={{
         duration,
         delay,
-        ease: [0.21, 1.11, 0.81, 0.99]
+        ease: [0.21, 1.11, 0.81, 0.99],
       }}
       className={cn(className)}
     >
@@ -60,4 +61,3 @@ export function AnimatedSection({
     </motion.div>
   );
 }
-
