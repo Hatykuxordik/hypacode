@@ -6,25 +6,30 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Moon, 
-  Sun, 
-  Menu, 
-  X, 
-  Home, 
-  User, 
-  Code, 
-  FolderOpen, 
-  Wrench, 
-  MessageSquare, 
-  Mail, 
+import {
+  Moon,
+  Sun,
+  Menu,
+  X,
+  Home,
+  User,
+  Code,
+  FolderOpen,
+  Wrench,
+  MessageSquare,
+  Mail,
   BookOpen,
   Github,
   Linkedin,
   Twitter,
-  ExternalLink
+  ExternalLink,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -143,9 +148,9 @@ export function Header() {
             {/* Enhanced Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="lg:hidden hover:bg-accent relative overflow-hidden group"
                 >
                   <motion.div
@@ -163,15 +168,15 @@ export function Header() {
                   />
                 </Button>
               </SheetTrigger>
-              <SheetContent 
-                side="right" 
+              <SheetContent
+                side="right"
                 className="w-[320px] sm:w-[380px] p-0 bg-background/98 backdrop-blur-xl border-l border-border/50"
               >
                 <div className="flex flex-col h-full">
                   {/* Enhanced Header */}
                   <div className="relative p-6 border-b border-border/50 bg-gradient-to-r from-primary/5 to-secondary/5">
                     <div className="flex items-center justify-between">
-                      <motion.div 
+                      <motion.div
                         className="flex items-center space-x-3"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -191,13 +196,15 @@ export function Header() {
                           <span className="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                             Hypacode
                           </span>
-                          <div className="text-xs text-muted-foreground">Frontend Developer</div>
+                          <div className="text-xs text-muted-foreground">
+                            Frontend Developer
+                          </div>
                         </div>
                       </motion.div>
                       <SheetClose asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           className="hover:bg-accent/50 relative overflow-hidden group"
                         >
                           <motion.div
@@ -226,7 +233,7 @@ export function Header() {
                       {navigation.map((item, index) => {
                         const Icon = item.icon;
                         const isActive = pathname === item.href;
-                        
+
                         return (
                           <motion.div
                             key={item.name}
@@ -238,15 +245,21 @@ export function Header() {
                               <Link
                                 href={item.href}
                                 className={`group flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 hover:bg-accent hover:text-primary relative overflow-hidden ${
-                                  isActive 
-                                    ? "bg-primary/10 text-primary shadow-sm" 
+                                  isActive
+                                    ? "bg-primary/10 text-primary shadow-sm"
                                     : ""
                                 }`}
                               >
-                                <Icon className={`h-5 w-5 mr-3 transition-colors ${
-                                  isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
-                                }`} />
-                                <span className="relative z-10">{item.name}</span>
+                                <Icon
+                                  className={`h-5 w-5 mr-3 transition-colors ${
+                                    isActive
+                                      ? "text-primary"
+                                      : "text-muted-foreground group-hover:text-primary"
+                                  }`}
+                                />
+                                <span className="relative z-10">
+                                  {item.name}
+                                </span>
                                 {isActive && (
                                   <motion.div
                                     className="absolute right-3 top-1/2 -translate-y-1/2"
@@ -254,7 +267,10 @@ export function Header() {
                                     animate={{ scale: 1 }}
                                     transition={{ delay: 0.1 }}
                                   >
-                                    <Badge variant="secondary" className="text-xs">
+                                    <Badge
+                                      variant="secondary"
+                                      className="text-xs"
+                                    >
                                       Active
                                     </Badge>
                                   </motion.div>
@@ -293,7 +309,11 @@ export function Header() {
                                 className="hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 relative overflow-hidden group"
                                 asChild
                               >
-                                <a href={social.href} target="_blank" rel="noopener noreferrer">
+                                <a
+                                  href={social.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
                                   <Icon className="h-4 w-4" />
                                   <ExternalLink className="h-3 w-3 absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </a>
@@ -306,15 +326,17 @@ export function Header() {
                   </nav>
 
                   {/* Enhanced Footer */}
-                  <motion.div 
+                  <motion.div
                     className="p-6 border-t border-border/50 bg-muted/30"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
                   >
                     <div className="text-center space-y-2">
-                      <div className="text-sm font-medium">Ready to work together?</div>
-                      <Button 
+                      <div className="text-sm font-medium">
+                        Ready to work together?
+                      </div>
+                      <Button
                         className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
                         asChild
                       >
@@ -337,4 +359,3 @@ export function Header() {
     </header>
   );
 }
-

@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     url: "https://hypacode.com",
     title: "Hypacode - Frontend Developer Portfolio",
     description:
-      "Building modern web experiences with cutting-edge technologies.",
+      "Solution-oriented frontend developer with over 3 years of experience in building user-friendly, responsive and visually appealing web applications using modern technologies like React.js, Next.js, and TypeScript.",
     siteName: "Hypacode",
   },
   twitter: {
