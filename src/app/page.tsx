@@ -15,10 +15,17 @@ import Link from "next/link";
 
 import { organizationSchema, personSchema, websiteSchema } from "@/lib/json-ld";
 import { SocialIcon } from "@/components/ui/social-icon";
+import AnimatedProfilePic from "../components/ui/AnimatedProfilePic";
 
 export const dynamic = "force-static";
 
 export default function HomePage() {
+  const profileImages = [
+    "/assets/profile1.jpg",
+    "/assets/profile2.jpg",
+    "/assets/profile3.jpg",
+  ];
+
   const stats = [
     { value: "3+", label: "Years Experience", color: "text-blue-600" },
     { value: "15+", label: "Projects Completed", color: "text-green-600" },
@@ -101,7 +108,7 @@ export default function HomePage() {
 
       {/* About Preview Section */}
       <AnimatedSection direction="right" delay={0.2}>
-        <Section className="py-20 px-4 sm:px-6 lg:px-8">
+        <Section className="pt-2 pb-20 md:pt-20 md:pb-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div>
               <p className="text-primary text-lg font-medium mb-2">
@@ -166,19 +173,13 @@ export default function HomePage() {
               <FloatingCard
                 delay={0.4}
                 hoverScale={1.05}
+                hoverRotate={20}
                 className="hover:shadow-none"
               >
-                <div className="relative">
-                  <div className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 mx-auto">
-                    <Image
-                      src="/assets/profile.jpg"
-                      alt="Sodiq Atiku - Frontend Developer"
-                      className="rounded-full brightness-[85%] dark:brightness-75"
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  </div>
-                </div>
+                <AnimatedProfilePic
+                  images={profileImages}
+                  interval={4000} // Change image every 4 seconds
+                />
               </FloatingCard>
             </div>
           </div>
