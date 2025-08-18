@@ -1,0 +1,11 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Host
+Host: https://hypacode.com
+
+# Sitemaps
+Sitemap: https://hypacode.com/sitemap.xml
