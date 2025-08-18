@@ -169,20 +169,14 @@ export default function HomePage() {
                 className="hover:shadow-none"
               >
                 <div className="relative">
-                  <div className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full" />
-                    {/* Placeholder for profile image */}
-                    <div className="w-full h-full rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-                      <div className="text-6xl font-bold text-primary/20">
-                        <Image
-                          src="/assets/profile.jpg"
-                          alt="Sodiq Atiku - Frontend Developer"
-                          className="rounded-full dark:brightness-75"
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      </div>
-                    </div>
+                  <div className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 mx-auto">
+                    <Image
+                      src="/assets/profile.jpg"
+                      alt="Sodiq Atiku - Frontend Developer"
+                      className="rounded-full brightness-[85%] dark:brightness-75"
+                      layout="fill"
+                      objectFit="cover"
+                    />
                   </div>
                 </div>
               </FloatingCard>
