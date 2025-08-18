@@ -173,7 +173,7 @@ export default function HomePage() {
               <FloatingCard
                 delay={0.4}
                 hoverScale={1.05}
-                hoverRotate={20}
+                hoverRotate={2}
                 className="hover:shadow-none"
               >
                 <AnimatedProfilePic

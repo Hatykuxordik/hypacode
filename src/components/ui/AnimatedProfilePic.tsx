@@ -67,7 +67,7 @@ const AnimatedProfilePic: React.FC<AnimatedProfilePicProps> = ({
 
   return (
     <>
-      <div className="relative" ref={containerRef}>
+      <div className="relative " ref={containerRef}>
         <div
           className={`relative w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 mx-auto ${
             isMobile ? "is-mobile" : "is-desktop"
@@ -95,7 +95,7 @@ const AnimatedProfilePic: React.FC<AnimatedProfilePicProps> = ({
                 <Image
                   src={imageSrc}
                   alt={`Profile image ${index + 1}`}
-                  className="object-cover rounded-full brightness-[85%] dark:brightness-75"
+                  className="cursor-pointer object-cover rounded-full brightness-[85%] dark:brightness-75"
                   fill
                   priority={index === 0}
                 />
