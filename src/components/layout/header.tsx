@@ -86,31 +86,42 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`text-sm font-medium transition-all duration-200 hover:text-primary relative group ${
-                  pathname === item.href ? "text-primary" : ""
-                }`}
-              >
-                <span className="relative z-10">{item.name}</span>
-                {pathname === item.href && (
+            {navigation.map((item) => {
+              const isActive =
+                pathname === item.href || pathname.startsWith(item.href + "/");
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`text-sm font-medium transition-all duration-200 hover:text-primary relative group ${
+                    isActive ? "text-primary" : ""
+                  }`}
+                >
+                  <span className="relative z-10">{item.name}</span>
+
+                  {isActive && (
+                    <motion.div
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full z-20"
+                      layoutId="activeTab"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+
                   <motion.div
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
-                    layoutId="activeTab"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    className="absolute inset-0 bg-primary/10 rounded-md -z-10"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileHover={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.2 }}
                   />
-                )}
-                <motion.div
-                  className="absolute inset-0 bg-primary/10 rounded-md -z-10"
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileHover={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                />
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Theme Toggle & Mobile Menu */}

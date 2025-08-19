@@ -95,7 +95,7 @@ const AnimatedProfilePic: React.FC<AnimatedProfilePicProps> = ({
                 <Image
                   src={imageSrc}
                   alt={`Profile image ${index + 1}`}
-                  className="cursor-pointer object-cover rounded-full brightness-[85%] dark:brightness-75"
+                  className="cursor-pointer object-cover rounded-full brightness-[90%] dark:brightness-75"
                   fill
                   priority={index === 0}
                 />
