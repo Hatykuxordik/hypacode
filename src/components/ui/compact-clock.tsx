@@ -6,44 +6,42 @@ import { Clock, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function CompactClock() {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState<Date | null>(null);
   const [timezone, setTimezone] = useState("");
   const [location, setLocation] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
-    // Update time every second
-    const timer = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
+    // Initialize immediately on client
+    const update = () => setTime(new Date());
+    update();
 
-    // Get user's timezone and location
+    // Tick every second
+    const timer = setInterval(update, 1000);
+
+    // Detect timezone + city
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     setTimezone(userTimezone);
-
-    // Extract city from timezone (e.g., "America/New_York" -> "New York")
     const city = userTimezone.split("/").pop()?.replace(/_/g, " ") || "Local";
     setLocation(city);
 
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], {
+  const formatTime = (date: Date) =>
+    date.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
     });
-  };
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString([], {
+  const formatDate = (date: Date) =>
+    date.toLocaleDateString([], {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
     });
-  };
 
   return (
     <div className="invisible md:visible fixed top-20 right-4 z-40">
@@ -65,7 +63,9 @@ export function CompactClock() {
                   className="flex items-center space-x-2"
                 >
                   <Clock className="h-4 w-4 text-primary" />
-                  <div className="text-sm font-mono">{formatTime(time)}</div>
+                  <div className="text-sm font-mono">
+                    {time ? formatTime(time) : "--:--:--"}
+                  </div>
                 </motion.div>
               ) : (
                 <motion.div
@@ -78,13 +78,15 @@ export function CompactClock() {
                   <div className="flex items-center space-x-2">
                     <Clock className="h-4 w-4 text-primary" />
                     <div className="text-lg font-mono font-semibold">
-                      {formatTime(time)}
+                      {time ? formatTime(time) : "--:--:--"}
                     </div>
                   </div>
 
-                  <div className="text-sm text-muted-foreground">
-                    {formatDate(time)}
-                  </div>
+                  {time && (
+                    <div className="text-sm text-muted-foreground">
+                      {formatDate(time)}
+                    </div>
+                  )}
 
                   <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                     <MapPin className="h-3 w-3" />

@@ -7,8 +7,9 @@ export const organizationSchema: Organization = {
   url: "https://hypacode.com",
   logo: "https://hypacode.com/assets/Hypacodelogo.svg",
   sameAs: [
-    "https://github.com/hypacode", // Replace with actual GitHub
-    "https://linkedin.com/in/hypacode", // Replace with actual LinkedIn
+    "https://github.com/hatykuxordik", // Replace with actual GitHub
+    "https://linkedin.com/in/hatykuxordik",
+    "https://x.com/hypacode", // Replace with actual LinkedIn
     // Add other social media links
   ],
 };
@@ -20,8 +21,9 @@ export const personSchema: Person = {
   url: "https://hypacode.com",
   image: "https://hypacode.com/assets/profile.jpg", // Replace with actual profile image
   sameAs: [
-    "https://github.com/hypacode",
-    "https://linkedin.com/in/hypacode",
+    "https://github.com/hatykuxordik",
+    "https://linkedin.com/in/hatykuxordik",
+    "https://x.com/hypacode",
     // Add other social media links
   ],
   jobTitle: "Frontend Developer",
@@ -39,5 +41,3 @@ export const websiteSchema: WebSite = {
     "query-input": "required name=search_term_string",
   },
 };
-
-
