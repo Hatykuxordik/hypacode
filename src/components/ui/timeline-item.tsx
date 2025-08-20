@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin } from "lucide-react";
 
@@ -31,10 +37,10 @@ export function TimelineItem({
       {!isLast && (
         <div className="absolute left-6 top-12 w-0.5 h-full bg-border" />
       )}
-      
+
       {/* Timeline dot */}
       <div className="absolute left-4 top-6 w-4 h-4 bg-primary rounded-full border-4 border-background" />
-      
+
       {/* Content */}
       <div className="ml-12">
         <Card className="mb-8">
@@ -47,7 +53,7 @@ export function TimelineItem({
                 </CardDescription>
               </div>
               {status && (
-                <Badge 
+                <Badge
                   variant={status === "Current" ? "default" : "secondary"}
                   className="ml-4"
                 >
@@ -55,7 +61,7 @@ export function TimelineItem({
                 </Badge>
               )}
             </div>
-            
+
             <div className="flex items-center space-x-4 text-sm text-muted-foreground mt-2">
               <div className="flex items-center space-x-1">
                 <Calendar className="h-4 w-4" />
@@ -67,10 +73,10 @@ export function TimelineItem({
               </div>
             </div>
           </CardHeader>
-          
+
           <CardContent>
             <p className="text-muted-foreground mb-4">{description}</p>
-            
+
             {achievements && achievements.length > 0 && (
               <div className="mb-4">
                 <h4 className="font-semibold mb-2">Key Achievements:</h4>
@@ -81,7 +87,7 @@ export function TimelineItem({
                 </ul>
               </div>
             )}
-            
+
             {technologies && technologies.length > 0 && (
               <div>
                 <h4 className="font-semibold mb-2">Technologies Used:</h4>
@@ -100,4 +106,3 @@ export function TimelineItem({
     </div>
   );
 }
-

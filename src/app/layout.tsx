@@ -80,7 +80,7 @@ export default function RootLayout({
           <SmoothScrollProvider>
             <div className="min-h-screen bg-background text-foreground">
               <Header />
-              <main className="pt-16">{children}</main>
+              <main className="overflow-x-hidden">{children}</main>
               <Footer />
             </div>
             <FloatingAIAssistant />

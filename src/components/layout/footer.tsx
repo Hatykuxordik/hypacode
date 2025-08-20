@@ -1,14 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Github, Linkedin, Twitter, Mail } from "lucide-react";
+import {
+  GithubIcon,
+  LinkedinIcon,
+  TwitterIcon,
+  MailIcon,
+} from "@/components/icons";
 
 export function Footer() {
   return (
-    <footer className="bg-muted/50 border-t bg-background border-border">
+    <footer className="bg-muted/50 border-t border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-12">
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="flex flex-col space-y-2">
             <Link href="/" className="flex items-center space-x-2">
               <Image
                 src="/assets/Hypacodelogo.svg"
@@ -17,19 +22,53 @@ export function Footer() {
                 height={32}
                 className="h-8 w-8"
               />
-              <span className="text-lg font-bold">Hypacode</span>
+              <span className="text-lg font-bold text-primary">Hypacode</span>
             </Link>
+
             <p className="text-sm text-muted-foreground">
-              Solution-oriented frontend developer with over 3 years of
-              experience in building user-friendly, responsive and visually
-              appealing web applications using modern technologies like
-              React.js, Next.js, and TypeScript.
+              Frontend Developer passionate about creating user-friendly,
+              responsive, and visually appealing web applications with modern
+              technologies.
             </p>
+
+            {/* Social */}
+            <div className="mt-4">
+              <div className="flex space-x-4">
+                <Link
+                  href="https://github.com/hatykuxordik.com"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                  aria-label="GitHub"
+                >
+                  <GithubIcon className="h-5 w-5" />
+                </Link>
+                <Link
+                  href="https://linkedin.com/in/hatykuxordik"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <LinkedinIcon className="h-5 w-5" />
+                </Link>
+                <Link
+                  href="https://x.com/hypacode"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                  aria-label="Twitter"
+                >
+                  <TwitterIcon className="h-5 w-5" />
+                </Link>
+                <Link
+                  href="mailto:hatykuxordik@gmail.com"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                  aria-label="Email"
+                >
+                  <MailIcon className="h-5 w-5" />
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* Navigation */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold">Quick Links</h3>
+            <h3 className="text-lg font-semibold">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
@@ -68,47 +107,12 @@ export function Footer() {
 
           {/* Services */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold">Services</h3>
+            <h3 className="text-lg font-semibold">Services</h3>
             <ul className="space-y-2 text-sm">
               <li className="text-muted-foreground">Frontend Development</li>
               <li className="text-muted-foreground">Web Applications</li>
-              <li className="text-muted-foreground">Consulting</li>
+              <li className="text-muted-foreground">Debugging</li>
             </ul>
-          </div>
-
-          {/* Social */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold">Connect</h3>
-            <div className="flex space-x-4">
-              <Link
-                href="https://github.com"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="GitHub"
-              >
-                <Github className="h-5 w-5" />
-              </Link>
-              <Link
-                href="https://linkedin.com"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-5 w-5" />
-              </Link>
-              <Link
-                href="https://twitter.com"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
-              </Link>
-              <Link
-                href="mailto:contact@hypacode.com"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Email"
-              >
-                <Mail className="h-5 w-5" />
-              </Link>
-            </div>
           </div>
         </div>
 
