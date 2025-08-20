@@ -7,16 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { 
-  Send, 
-  Bot, 
-  User, 
-  MessageCircle, 
-  X, 
+import {
+  Send,
+  Bot,
+  User,
+  MessageCircle,
+  X,
   Minimize2,
   Code,
   ExternalLink,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -39,53 +39,99 @@ interface Message {
 const projectDatabase = [
   {
     title: "E-commerce Platform",
-    description: "A full-featured e-commerce platform with user authentication, payment processing, inventory management, and admin dashboard.",
-    technologies: ["Next.js", "TypeScript", "Stripe", "Prisma", "PostgreSQL", "Tailwind CSS"],
+    description:
+      "A full-featured e-commerce platform with user authentication, payment processing, inventory management, and admin dashboard.",
+    technologies: [
+      "Next.js",
+      "TypeScript",
+      "Stripe",
+      "Prisma",
+      "PostgreSQL",
+      "Tailwind CSS",
+    ],
     liveUrl: "https://ecommerce-demo.hypacode.com",
     githubUrl: "https://github.com/hypacode/ecommerce-platform",
     complexity: "Complex" as const,
     category: "Full Stack",
-    keywords: ["ecommerce", "payment", "stripe", "complex", "full-stack", "nextjs", "typescript"]
+    keywords: [
+      "ecommerce",
+      "payment",
+      "stripe",
+      "complex",
+      "full-stack",
+      "nextjs",
+      "typescript",
+    ],
   },
   {
     title: "SaaS Analytics Dashboard",
-    description: "Comprehensive analytics dashboard with real-time data visualization, user management, and subscription handling.",
-    technologies: ["React", "D3.js", "Node.js", "MongoDB", "Socket.io", "Chart.js"],
+    description:
+      "Comprehensive analytics dashboard with real-time data visualization, user management, and subscription handling.",
+    technologies: [
+      "React",
+      "D3.js",
+      "Node.js",
+      "MongoDB",
+      "Socket.io",
+      "Chart.js",
+    ],
     liveUrl: "https://analytics-demo.hypacode.com",
     githubUrl: "https://github.com/hypacode/saas-dashboard",
     complexity: "Complex" as const,
     category: "SaaS",
-    keywords: ["analytics", "dashboard", "react", "d3", "complex", "saas", "realtime"]
+    keywords: [
+      "analytics",
+      "dashboard",
+      "react",
+      "d3",
+      "complex",
+      "saas",
+      "realtime",
+    ],
   },
   {
     title: "Task Management App",
-    description: "A collaborative task management application with real-time updates, team collaboration, and project tracking.",
+    description:
+      "A collaborative task management application with real-time updates, team collaboration, and project tracking.",
     technologies: ["React", "Firebase", "Material-UI", "Redux", "TypeScript"],
     liveUrl: "https://tasks-demo.hypacode.com",
     githubUrl: "https://github.com/hypacode/task-manager",
     complexity: "Medium" as const,
     category: "Productivity",
-    keywords: ["task", "management", "collaboration", "react", "firebase", "medium"]
+    keywords: [
+      "task",
+      "management",
+      "collaboration",
+      "react",
+      "firebase",
+      "medium",
+    ],
   },
   {
     title: "Weather App",
-    description: "A beautiful weather application with location-based forecasts, interactive maps, and weather alerts.",
+    description:
+      "A beautiful weather application with location-based forecasts, interactive maps, and weather alerts.",
     technologies: ["React Native", "OpenWeather API", "Redux", "Expo"],
     liveUrl: "https://weather-demo.hypacode.com",
     githubUrl: "https://github.com/hypacode/weather-app",
     complexity: "Simple" as const,
     category: "Mobile",
-    keywords: ["weather", "mobile", "react native", "api", "simple"]
-  }
+    keywords: ["weather", "mobile", "react native", "api", "simple"],
+  },
 ];
 
-const generateAIResponse = (query: string): { content: string; projectData?: any } => {
+const generateAIResponse = (
+  query: string
+): { content: string; projectData?: any } => {
   const lowerQuery = query.toLowerCase();
-  
+
   // Find matching projects
-  const matchingProjects = projectDatabase.filter(project =>
-    project.keywords.some(keyword => lowerQuery.includes(keyword)) ||
-    project.technologies.some(tech => lowerQuery.includes(tech.toLowerCase()))
+  const matchingProjects = projectDatabase.filter(
+    (project) =>
+      project.keywords.some((keyword) => lowerQuery.includes(keyword)) ||
+      project.technologies.some((tech) =>
+        lowerQuery.includes(tech.toLowerCase())
+      )
   );
 
   if (matchingProjects.length > 0) {
@@ -100,34 +146,39 @@ const generateAIResponse = (query: string): { content: string; projectData?: any
   if (lowerQuery.includes("complex") || lowerQuery.includes("advanced")) {
     return {
       content: "Here's one of the most complex projects in the portfolio:",
-      projectData: projectDatabase.find(p => p.complexity === "Complex"),
+      projectData: projectDatabase.find((p) => p.complexity === "Complex"),
     };
   }
 
   if (lowerQuery.includes("react")) {
     return {
-      content: "Here's a React project that showcases modern development practices:",
-      projectData: projectDatabase.find(p => p.technologies.includes("React")),
+      content:
+        "Here's a React project that showcases modern development practices:",
+      projectData: projectDatabase.find((p) =>
+        p.technologies.includes("React")
+      ),
     };
   }
 
   if (lowerQuery.includes("full-stack") || lowerQuery.includes("fullstack")) {
     return {
-      content: "Here's a full-stack project demonstrating end-to-end development skills:",
-      projectData: projectDatabase.find(p => p.category === "Full Stack"),
+      content:
+        "Here's a full-stack project demonstrating end-to-end development skills:",
+      projectData: projectDatabase.find((p) => p.category === "Full Stack"),
     };
   }
 
   if (lowerQuery.includes("mobile")) {
     return {
       content: "Here's a mobile-focused project with responsive design:",
-      projectData: projectDatabase.find(p => p.category === "Mobile"),
+      projectData: projectDatabase.find((p) => p.category === "Mobile"),
     };
   }
 
   // General response
   return {
-    content: "I can help you explore Hypacode's projects! Try asking about specific technologies like 'React projects', 'full-stack work', or 'mobile apps'. You can also ask about project complexity or specific features you're interested in.",
+    content:
+      "I can help you explore Hypacode's projects! Try asking about specific technologies like 'React projects', 'full-stack work', or 'mobile apps'. You can also ask about project complexity or specific features you're interested in.",
   };
 };
 
@@ -138,7 +189,8 @@ export function FloatingAIAssistant() {
     {
       id: "1",
       type: "ai",
-      content: "Hi! I'm Hypacode's AI assistant. Ask me about projects, technologies, or anything you'd like to know! 🚀",
+      content:
+        "Hi! I'm Hypacode's AI assistant. Ask me about projects, technologies, or anything you'd like to know! 🚀",
       timestamp: new Date(),
     },
   ]);
@@ -202,11 +254,11 @@ export function FloatingAIAssistant() {
             <Button
               onClick={() => setIsOpen(true)}
               size="lg"
-              className="h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 bg-primary hover:bg-primary/90"
+              className="cursor-pointer h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 bg-primary hover:bg-primary/90"
             >
               <MessageCircle className="h-6 w-6" />
             </Button>
-            
+
             {/* Tooltip */}
             <div className="absolute bottom-16 right-0 mb-2 px-3 py-2 bg-foreground text-background text-sm rounded-lg shadow-lg opacity-0 hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
               Chat with Hypacode AI
@@ -220,12 +272,12 @@ export function FloatingAIAssistant() {
         {isOpen && (
           <motion.div
             initial={{ scale: 0, opacity: 0, x: 100, y: 100 }}
-            animate={{ 
-              scale: 1, 
-              opacity: 1, 
-              x: 0, 
+            animate={{
+              scale: 1,
+              opacity: 1,
+              x: 0,
               y: 0,
-              height: isMinimized ? "auto" : "500px"
+              height: isMinimized ? "auto" : "500px",
             }}
             exit={{ scale: 0, opacity: 0, x: 100, y: 100 }}
             className="fixed bottom-6 right-6 z-50 w-80 sm:w-96"
@@ -240,7 +292,10 @@ export function FloatingAIAssistant() {
                       <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
                     </div>
                     Hypacode AI
-                    <Badge variant="secondary" className="text-xs bg-primary-foreground/20 text-primary-foreground">
+                    <Badge
+                      variant="secondary"
+                      className="text-xs bg-primary-foreground/20 text-primary-foreground"
+                    >
                       Online
                     </Badge>
                   </CardTitle>
@@ -288,7 +343,9 @@ export function FloatingAIAssistant() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                                 className={`flex gap-2 ${
-                                  message.type === "user" ? "justify-end" : "justify-start"
+                                  message.type === "user"
+                                    ? "justify-end"
+                                    : "justify-start"
                                 }`}
                               >
                                 {message.type === "ai" && (
@@ -298,10 +355,12 @@ export function FloatingAIAssistant() {
                                     </AvatarFallback>
                                   </Avatar>
                                 )}
-                                
-                                <div className={`max-w-[85%] ${
-                                  message.type === "user" ? "order-first" : ""
-                                }`}>
+
+                                <div
+                                  className={`max-w-[85%] ${
+                                    message.type === "user" ? "order-first" : ""
+                                  }`}
+                                >
                                   <div
                                     className={`rounded-lg px-3 py-2 text-sm ${
                                       message.type === "user"
@@ -311,41 +370,75 @@ export function FloatingAIAssistant() {
                                   >
                                     {message.content}
                                   </div>
-                                  
+
                                   {message.projectData && (
                                     <motion.div
                                       initial={{ opacity: 0, scale: 0.95 }}
                                       animate={{ opacity: 1, scale: 1 }}
                                       className="mt-2 p-3 border rounded-lg bg-card text-xs"
                                     >
-                                      <h4 className="font-semibold mb-1">{message.projectData.title}</h4>
+                                      <h4 className="font-semibold mb-1">
+                                        {message.projectData.title}
+                                      </h4>
                                       <p className="text-muted-foreground mb-2 line-clamp-2">
                                         {message.projectData.description}
                                       </p>
                                       <div className="flex flex-wrap gap-1 mb-2">
-                                        {message.projectData.technologies.slice(0, 3).map((tech: string) => (
-                                          <Badge key={tech} variant="outline" className="text-xs">
-                                            {tech}
-                                          </Badge>
-                                        ))}
-                                        {message.projectData.technologies.length > 3 && (
-                                          <Badge variant="outline" className="text-xs">
-                                            +{message.projectData.technologies.length - 3}
+                                        {message.projectData.technologies
+                                          .slice(0, 3)
+                                          .map((tech: string) => (
+                                            <Badge
+                                              key={tech}
+                                              variant="outline"
+                                              className="text-xs"
+                                            >
+                                              {tech}
+                                            </Badge>
+                                          ))}
+                                        {message.projectData.technologies
+                                          .length > 3 && (
+                                          <Badge
+                                            variant="outline"
+                                            className="text-xs"
+                                          >
+                                            +
+                                            {message.projectData.technologies
+                                              .length - 3}
                                           </Badge>
                                         )}
                                       </div>
                                       <div className="flex gap-1">
                                         {message.projectData.liveUrl && (
-                                          <Button size="sm" variant="outline" className="text-xs h-6" asChild>
-                                            <a href={message.projectData.liveUrl} target="_blank" rel="noopener noreferrer">
+                                          <Button
+                                            size="sm"
+                                            variant="outline"
+                                            className="text-xs h-6"
+                                            asChild
+                                          >
+                                            <a
+                                              href={message.projectData.liveUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                            >
                                               <ExternalLink className="h-2 w-2 mr-1" />
                                               Demo
                                             </a>
                                           </Button>
                                         )}
                                         {message.projectData.githubUrl && (
-                                          <Button size="sm" variant="outline" className="text-xs h-6" asChild>
-                                            <a href={message.projectData.githubUrl} target="_blank" rel="noopener noreferrer">
+                                          <Button
+                                            size="sm"
+                                            variant="outline"
+                                            className="text-xs h-6"
+                                            asChild
+                                          >
+                                            <a
+                                              href={
+                                                message.projectData.githubUrl
+                                              }
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                            >
                                               <Code className="h-2 w-2 mr-1" />
                                               Code
                                             </a>
@@ -355,7 +448,7 @@ export function FloatingAIAssistant() {
                                     </motion.div>
                                   )}
                                 </div>
-                                
+
                                 {message.type === "user" && (
                                   <Avatar className="h-6 w-6 mt-1">
                                     <AvatarFallback className="bg-primary text-primary-foreground">
@@ -366,7 +459,7 @@ export function FloatingAIAssistant() {
                               </motion.div>
                             ))}
                           </AnimatePresence>
-                          
+
                           {isTyping && (
                             <motion.div
                               initial={{ opacity: 0, y: 20 }}
@@ -381,8 +474,14 @@ export function FloatingAIAssistant() {
                               <div className="bg-muted rounded-lg px-3 py-2">
                                 <div className="flex space-x-1">
                                   <div className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" />
-                                  <div className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
-                                  <div className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+                                  <div
+                                    className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce"
+                                    style={{ animationDelay: "0.1s" }}
+                                  />
+                                  <div
+                                    className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce"
+                                    style={{ animationDelay: "0.2s" }}
+                                  />
                                 </div>
                               </div>
                             </motion.div>
@@ -398,7 +497,7 @@ export function FloatingAIAssistant() {
                             "Complex projects",
                             "React work",
                             "Full-stack",
-                            "Mobile apps"
+                            "Mobile apps",
                           ].map((question) => (
                             <Button
                               key={question}
@@ -422,7 +521,11 @@ export function FloatingAIAssistant() {
                           onKeyPress={(e) => e.key === "Enter" && handleSend()}
                           className="flex-1 text-sm"
                         />
-                        <Button onClick={handleSend} size="icon" className="shrink-0 h-9 w-9">
+                        <Button
+                          onClick={handleSend}
+                          size="icon"
+                          className="shrink-0 h-9 w-9"
+                        >
                           <Send className="h-3 w-3" />
                         </Button>
                       </div>
@@ -437,4 +540,3 @@ export function FloatingAIAssistant() {
     </>
   );
 }
-

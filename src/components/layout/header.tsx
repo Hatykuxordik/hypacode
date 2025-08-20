@@ -131,7 +131,7 @@ export function Header() {
               size="icon"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               aria-label="Toggle theme"
-              className="hover:bg-accent relative overflow-hidden group"
+              className="cursor-pointer hover:bg-accent relative overflow-hidden group"
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -142,14 +142,14 @@ export function Header() {
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   {theme === "dark" ? (
-                    <Sun className="h-5 w-5 text-yellow-500" />
+                    <Sun className="h-5 w-5 text-foreground" />
                   ) : (
-                    <Moon className="h-5 w-5 text-blue-600" />
+                    <Moon className="h-5 w-5 text-primary" />
                   )}
                 </motion.div>
               </AnimatePresence>
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-orange-400/20 rounded-md"
+                className="absolute inset-0 bg-foreground rounded-md"
                 initial={{ scale: 0 }}
                 whileHover={{ scale: 1 }}
                 transition={{ duration: 0.2 }}
@@ -162,17 +162,31 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="lg:hidden hover:bg-accent relative overflow-hidden group"
+                  className="lg:hidden relative overflow-hidden group"
+                  onClick={() => setIsOpen(!isOpen)}
                 >
-                  <motion.div
-                    animate={isOpen ? { rotate: 90 } : { rotate: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="h-5 w-5" />
-                  </motion.div>
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={isOpen ? "x" : "menu"}
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {isOpen ? (
+                        <X className="h-5 w-5" />
+                      ) : (
+                        <Menu className="h-5 w-5" />
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+
                   <span className="sr-only">Toggle menu</span>
+
                   <motion.div
-                    className="absolute inset-0 bg-primary/10 rounded-md"
+                    className={`absolute inset-0 rounded-md ${
+                      isOpen ? "bg-red-500/10" : "bg-primary/10"
+                    }`}
                     initial={{ scale: 0 }}
                     whileHover={{ scale: 1 }}
                     transition={{ duration: 0.2 }}
@@ -185,7 +199,7 @@ export function Header() {
               >
                 <div className="flex flex-col h-full">
                   {/* Enhanced Header */}
-                  <div className="relative p-6 border-b border-border/50 bg-gradient-to-r from-primary/5 to-secondary/5">
+                  <div className="relative p-6 border-b border-border/50 bg-background">
                     <div className="flex items-center justify-between">
                       <motion.div
                         className="flex items-center space-x-3"
@@ -204,7 +218,7 @@ export function Header() {
                           <div className="absolute inset-0 bg-primary/20 rounded-full blur-md -z-10" />
                         </div>
                         <div>
-                          <span className="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                          <span className="text-lg font-bold bg-primary bg-clip-text text-transparent">
                             Hypacode
                           </span>
                           <div className="text-xs text-muted-foreground">
@@ -212,35 +226,12 @@ export function Header() {
                           </div>
                         </div>
                       </motion.div>
-                      <SheetClose asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="hover:bg-accent/50 relative overflow-hidden group"
-                        >
-                          <motion.div
-                            whileHover={{ rotate: 90 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <X className="h-5 w-5" />
-                          </motion.div>
-                          <motion.div
-                            className="absolute inset-0 bg-red-500/10 rounded-md"
-                            initial={{ scale: 0 }}
-                            whileHover={{ scale: 1 }}
-                            transition={{ duration: 0.2 }}
-                          />
-                        </Button>
-                      </SheetClose>
                     </div>
                   </div>
 
                   {/* Enhanced Navigation */}
                   <nav className="flex-1 px-6 py-8 overflow-y-auto">
                     <div className="space-y-3">
-                      <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-                        Navigation
-                      </div>
                       {navigation.map((item, index) => {
                         const Icon = item.icon;
                         const isActive = pathname === item.href;
@@ -255,7 +246,7 @@ export function Header() {
                             <SheetClose asChild>
                               <Link
                                 href={item.href}
-                                className={`group flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 hover:bg-accent hover:text-primary relative overflow-hidden ${
+                                className={`group flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 hover:bg-accent hover:text-foreground relative overflow-hidden ${
                                   isActive
                                     ? "bg-primary/10 text-primary shadow-sm"
                                     : ""
@@ -348,7 +339,7 @@ export function Header() {
                         Ready to work together?
                       </div>
                       <Button
-                        className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                        className="w-full bg-primary hover:primary/80 text-white shadow-lg hover:shadow-xl transition-all duration-300"
                         asChild
                       >
                         <Link href="/contact">
@@ -357,7 +348,8 @@ export function Header() {
                         </Link>
                       </Button>
                       <div className="text-xs text-muted-foreground">
-                        © 2024 Hypacode. All rights reserved.
+                        &copy; {new Date().getFullYear()} Hypacode. All rights
+                        reserved.
                       </div>
                     </div>
                   </motion.div>
