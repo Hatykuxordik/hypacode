@@ -68,6 +68,7 @@ export function LiveCodeSandbox() {
   const [activeTab, setActiveTab] = useState("theme");
   const [copied, setCopied] = useState(false);
   const [cssCode, setCssCode] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
 
   const jsxCode = `function ThemedComponent() {
   return (
@@ -91,6 +92,13 @@ export function LiveCodeSandbox() {
     </div>
   );
 }`;
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const newCssCode = `.themed-container {
@@ -196,14 +204,22 @@ export function LiveCodeSandbox() {
     toast.success("Code copied to clipboard!");
   };
 
-  const tabs = [
-    {
-      id: "theme",
-      name: "Theme Controls",
-      icon: <Palette className="w-4 h-4" />,
-    },
-    { id: "code", name: "View Code", icon: <Code className="w-4 h-4" /> },
-  ];
+  const tabs = isMobile
+    ? [
+        {
+          id: "theme",
+          name: "Theme Controls",
+          icon: <Palette className="w-4 h-4" />,
+        },
+      ] // Hide code tab on mobile
+    : [
+        {
+          id: "theme",
+          name: "Theme Controls",
+          icon: <Palette className="w-4 h-4" />,
+        },
+        { id: "code", name: "View Code", icon: <Code className="w-4 h-4" /> },
+      ];
 
   return (
     <motion.div
@@ -232,21 +248,23 @@ export function LiveCodeSandbox() {
             >
               <RotateCcw className="w-5 h-5" />
             </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={copyCode}
-              className="flex items-center space-x-2 px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
-            >
-              {copied ? (
-                <Check className="w-4 h-4" />
-              ) : (
-                <Copy className="w-4 h-4" />
-              )}
-              <span className="text-sm">
-                {copied ? "Copied!" : "Copy Code"}
-              </span>
-            </motion.button>
+            {!isMobile && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={copyCode}
+                className="flex items-center space-x-2 px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
+              >
+                {copied ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
+                <span className="text-sm">
+                  {copied ? "Copied!" : "Copy Code"}
+                </span>
+              </motion.button>
+            )}
           </div>
         </div>
       </div>
@@ -273,7 +291,7 @@ export function LiveCodeSandbox() {
           </div>
 
           {/* Tab Content */}
-          <div className="p-6">
+          <div className="p-6 overflow-y-auto max-h-[60vh] lg:max-h-none">
             {activeTab === "theme" && (
               <div className="space-y-6">
                 <div>
@@ -368,86 +386,95 @@ export function LiveCodeSandbox() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Border Radius: {theme.borderRadius}px
-                  </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="50"
-                    value={theme.borderRadius}
-                    onChange={(e) =>
-                      updateTheme("borderRadius", parseInt(e.target.value))
-                    }
-                    className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
+                {!isMobile && (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Border Radius: {theme.borderRadius}px
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="50"
+                        value={theme.borderRadius}
+                        onChange={(e) =>
+                          updateTheme("borderRadius", parseInt(e.target.value))
+                        }
+                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Spacing: {theme.spacing}px
-                  </label>
-                  <input
-                    type="range"
-                    min="4"
-                    max="50"
-                    step="2"
-                    value={theme.spacing}
-                    onChange={(e) =>
-                      updateTheme("spacing", parseInt(e.target.value))
-                    }
-                    className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Spacing: {theme.spacing}px
+                      </label>
+                      <input
+                        type="range"
+                        min="4"
+                        max="50"
+                        step="2"
+                        value={theme.spacing}
+                        onChange={(e) =>
+                          updateTheme("spacing", parseInt(e.target.value))
+                        }
+                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Font Size: {theme.fontSize}px
-                  </label>
-                  <input
-                    type="range"
-                    min="12"
-                    max="24"
-                    value={theme.fontSize}
-                    onChange={(e) =>
-                      updateTheme("fontSize", parseInt(e.target.value))
-                    }
-                    className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Font Size: {theme.fontSize}px
+                      </label>
+                      <input
+                        type="range"
+                        min="12"
+                        max="24"
+                        value={theme.fontSize}
+                        onChange={(e) =>
+                          updateTheme("fontSize", parseInt(e.target.value))
+                        }
+                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Font Weight
-                  </label>
-                  <select
-                    value={theme.fontWeight}
-                    onChange={(e) => updateTheme("fontWeight", e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
-                  >
-                    <option value="400">400 - Normal</option>
-                    <option value="500">500 - Medium</option>
-                    <option value="600">600 - Semi Bold</option>
-                    <option value="700">700 - Bold</option>
-                  </select>
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Font Weight
+                      </label>
+                      <select
+                        value={theme.fontWeight}
+                        onChange={(e) =>
+                          updateTheme("fontWeight", e.target.value)
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
+                      >
+                        <option value="400">400 - Normal</option>
+                        <option value="500">500 - Medium</option>
+                        <option value="600">600 - Semi Bold</option>
+                        <option value="700">700 - Bold</option>
+                      </select>
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Shadow Intensity: {theme.shadowIntensity}px
-                  </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="30"
-                    value={theme.shadowIntensity}
-                    onChange={(e) =>
-                      updateTheme("shadowIntensity", parseInt(e.target.value))
-                    }
-                    className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Shadow Intensity: {theme.shadowIntensity}px
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="30"
+                        value={theme.shadowIntensity}
+                        onChange={(e) =>
+                          updateTheme(
+                            "shadowIntensity",
+                            parseInt(e.target.value)
+                          )
+                        }
+                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                  </>
+                )}
 
                 {/* Presets */}
                 <div className="mt-6">
@@ -473,7 +500,7 @@ export function LiveCodeSandbox() {
               </div>
             )}
 
-            {activeTab === "code" && (
+            {activeTab === "code" && !isMobile && (
               <div className="space-y-4">
                 <div>
                   <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -514,7 +541,6 @@ export function LiveCodeSandbox() {
           <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
             <style>{cssCode}</style>
             <motion.div
-              key={JSON.stringify(theme)}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
