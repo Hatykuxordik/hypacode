@@ -1,57 +1,161 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Calculator, 
-  Clock, 
-  DollarSign, 
-  Users, 
-  Zap, 
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Calculator,
+  Clock,
+  DollarSign,
   CheckCircle,
   ArrowRight,
-  ArrowLeft,
-  Download
+  Users,
+  Smartphone,
+  Globe,
+  Database,
+  Mail,
+  Download,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
 interface ProjectData {
   projectName: string;
   projectType: string;
-  complexity: number;
-  features: string[];
-  timeline: number;
-  teamSize: number;
   description: string;
+  features: string[];
+  complexity: string;
+  timeline: string;
+  budget: string;
+  maintenance: boolean;
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
+  company: string;
 }
 
 const projectTypes = [
-  { id: "landing", name: "Landing Page", basePrice: 1500, multiplier: 1 },
-  { id: "website", name: "Business Website", basePrice: 3000, multiplier: 1.2 },
-  { id: "ecommerce", name: "E-commerce", basePrice: 5000, multiplier: 1.5 },
-  { id: "webapp", name: "Web Application", basePrice: 8000, multiplier: 2 },
-  { id: "mobile", name: "Mobile App", basePrice: 12000, multiplier: 2.5 },
-  { id: "custom", name: "Custom Solution", basePrice: 15000, multiplier: 3 },
+  {
+    id: "landing",
+    name: "Landing Page",
+    description: "Single page website with modern design",
+    basePrice: 1500,
+    timeline: "1-2 weeks",
+    icon: <Globe className="w-6 h-6" />,
+  },
+  {
+    id: "business",
+    name: "Business Website",
+    description: "Multi-page corporate website",
+    basePrice: 3000,
+    timeline: "3-4 weeks",
+    icon: <Users className="w-6 h-6" />,
+  },
+  {
+    id: "ecommerce",
+    name: "E-commerce",
+    description: "Online store with payment integration",
+    basePrice: 5000,
+    timeline: "6-8 weeks",
+    icon: <DollarSign className="w-6 h-6" />,
+  },
+  {
+    id: "webapp",
+    name: "Web Application",
+    description: "Custom web application with database",
+    basePrice: 8000,
+    timeline: "8-12 weeks",
+    icon: <Database className="w-6 h-6" />,
+  },
+  {
+    id: "mobile",
+    name: "Mobile App",
+    description: "Native or hybrid mobile application",
+    basePrice: 12000,
+    timeline: "12-16 weeks",
+    icon: <Smartphone className="w-6 h-6" />,
+  },
+  {
+    id: "custom",
+    name: "Custom Solution",
+    description: "Tailored solution for specific needs",
+    basePrice: 15000,
+    timeline: "Varies",
+    icon: <Calculator className="w-6 h-6" />,
+  },
 ];
 
 const features = [
-  { id: "responsive", name: "Responsive Design", price: 500 },
-  { id: "cms", name: "Content Management", price: 1000 },
-  { id: "auth", name: "User Authentication", price: 800 },
-  { id: "payment", name: "Payment Integration", price: 1200 },
-  { id: "api", name: "API Integration", price: 1000 },
-  { id: "analytics", name: "Analytics Dashboard", price: 1500 },
-  { id: "seo", name: "SEO Optimization", price: 600 },
-  { id: "multilang", name: "Multi-language", price: 800 },
-  { id: "realtime", name: "Real-time Features", price: 2000 },
-  { id: "admin", name: "Admin Panel", price: 1800 },
+  { id: "responsive", name: "Responsive Design", price: 500, included: true },
+  { id: "cms", name: "Content Management System", price: 1500 },
+  { id: "seo", name: "SEO Optimization", price: 800 },
+  { id: "analytics", name: "Analytics Integration", price: 300 },
+  { id: "social", name: "Social Media Integration", price: 400 },
+  { id: "payment", name: "Payment Gateway", price: 1200 },
+  { id: "api", name: "Third-party API Integration", price: 1000 },
+  { id: "multilingual", name: "Multi-language Support", price: 1500 },
+  { id: "auth", name: "User Authentication", price: 1200 },
+  { id: "chat", name: "Live Chat Support", price: 600 },
+  { id: "admin", name: "Admin Panel", price: 2000 },
+];
+
+const complexityLevels = [
+  {
+    id: "simple",
+    name: "Simple",
+    multiplier: 1,
+    description: "Basic functionality, standard design",
+  },
+  {
+    id: "moderate",
+    name: "Moderate",
+    multiplier: 1.5,
+    description: "Custom features, advanced design",
+  },
+  {
+    id: "complex",
+    name: "Complex",
+    multiplier: 2,
+    description: "Highly customized, advanced functionality",
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    multiplier: 3,
+    description: "Large-scale, mission-critical application",
+  },
+];
+
+const timelines = [
+  {
+    id: "rush",
+    name: "Rush (1-2 weeks)",
+    multiplier: 1.5,
+    description: "Expedited delivery",
+  },
+  {
+    id: "standard",
+    name: "Standard (3-6 weeks)",
+    multiplier: 1,
+    description: "Normal timeline",
+  },
+  {
+    id: "extended",
+    name: "Extended (2-3 months)",
+    multiplier: 0.9,
+    description: "Flexible timeline",
+  },
+  {
+    id: "longterm",
+    name: "Long-term (3+ months)",
+    multiplier: 0.8,
+    description: "Phased development",
+  },
 ];
 
 export function ProjectCostEstimator() {
@@ -59,110 +163,222 @@ export function ProjectCostEstimator() {
   const [projectData, setProjectData] = useState<ProjectData>({
     projectName: "",
     projectType: "",
-    complexity: [5],
-    features: [],
-    timeline: [8],
-    teamSize: [2],
     description: "",
+    features: [],
+    complexity: "",
+    timeline: "",
+    budget: "",
+    maintenance: false,
+    contactName: "",
+    contactEmail: "",
+    contactPhone: "",
+    company: "",
   });
+  const [estimate, setEstimate] = useState(null);
+  const [showResults, setShowResults] = useState(false);
 
-  const totalSteps = 4;
+  useEffect(() => {
+    if (
+      projectData.projectType &&
+      projectData.complexity &&
+      projectData.timeline
+    ) {
+      calculateEstimate();
+    }
+  }, [projectData]);
 
-  const calculateCost = () => {
-    const selectedType = projectTypes.find(type => type.id === projectData.projectType);
-    if (!selectedType) return 0;
+  const calculateEstimate = () => {
+    const baseType = projectTypes.find((t) => t.id === projectData.projectType);
+    if (!baseType) return;
 
-    let baseCost = selectedType.basePrice;
-    
-    // Complexity multiplier (1-10 scale, 0.5x to 2x multiplier)
-    const complexityMultiplier = 0.5 + (projectData.complexity[0] / 10) * 1.5;
-    baseCost *= complexityMultiplier;
-
-    // Features cost
-    const featuresCost = projectData.features.reduce((total, featureId) => {
-      const feature = features.find(f => f.id === featureId);
+    const basePrice = baseType.basePrice;
+    const featuresPrice = projectData.features.reduce((total, featureId) => {
+      const feature = features.find((f) => f.id === featureId);
       return total + (feature?.price || 0);
     }, 0);
 
-    // Timeline adjustment (rush jobs cost more)
-    const timelineMultiplier = projectData.timeline[0] < 4 ? 1.5 : 
-                              projectData.timeline[0] < 8 ? 1.2 : 1;
+    const complexity = complexityLevels.find(
+      (c) => c.id === projectData.complexity
+    );
+    const timeline = timelines.find((t) => t.id === projectData.timeline);
 
-    // Team size multiplier
-    const teamMultiplier = 1 + (projectData.teamSize[0] - 1) * 0.3;
+    const complexityMultiplier = complexity?.multiplier || 1;
+    const timelineMultiplier = timeline?.multiplier || 1;
 
-    const totalCost = (baseCost + featuresCost) * timelineMultiplier * teamMultiplier;
-    return Math.round(totalCost);
+    const subtotal =
+      (basePrice + featuresPrice) * complexityMultiplier * timelineMultiplier;
+    const maintenanceCost = projectData.maintenance ? subtotal * 0.15 : 0;
+    const total = subtotal + maintenanceCost;
+
+    const baseWeeks = parseInt(baseType.timeline.split("-")[0]) || 0;
+    const adjustedWeeks = Math.ceil(
+      (baseWeeks * complexityMultiplier) / timelineMultiplier
+    );
+
+    setEstimate({
+      basePrice,
+      featuresPrice,
+      subtotal,
+      maintenanceCost,
+      total,
+      timeline: adjustedWeeks,
+      breakdown: {
+        projectType: baseType.name,
+        complexity: complexity?.name,
+        timelineType: timeline?.name,
+        features: projectData.features
+          .map((id) => features.find((f) => f.id === id)?.name)
+          .filter(Boolean),
+      },
+    });
   };
 
-  const nextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
-    }
+  const handleProjectTypeSelect = (typeId) => {
+    setProjectData((prev) => ({ ...prev, projectType: typeId }));
+    setCurrentStep(2);
   };
 
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const toggleFeature = (featureId: string) => {
-    setProjectData(prev => ({
+  const handleFeatureToggle = (featureId) => {
+    setProjectData((prev) => ({
       ...prev,
       features: prev.features.includes(featureId)
-        ? prev.features.filter(id => id !== featureId)
-        : [...prev.features, featureId]
+        ? prev.features.filter((id) => id !== featureId)
+        : [...prev.features, featureId],
     }));
   };
 
-  const generateQuote = () => {
-    const cost = calculateCost();
-    const quote = {
-      projectName: projectData.projectName,
-      projectType: projectTypes.find(t => t.id === projectData.projectType)?.name,
-      estimatedCost: cost,
-      timeline: projectData.timeline[0],
-      features: projectData.features.map(id => features.find(f => f.id === id)?.name).filter(Boolean),
-      date: new Date().toLocaleDateString(),
-    };
-
-    const quoteText = `
-Project Quote
-=============
-Project: ${quote.projectName}
-Type: ${quote.projectType}
-Estimated Cost: $${quote.estimatedCost.toLocaleString()}
-Timeline: ${quote.timeline} weeks
-Features: ${quote.features.join(', ')}
-Date: ${quote.date}
-    `;
-
-    const blob = new Blob([quoteText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${projectData.projectName.replace(/\s+/g, '_')}_quote.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    toast.success("Quote generated and downloaded!");
+  const handleComplexitySelect = (value) => {
+    setProjectData((prev) => ({ ...prev, complexity: value }));
   };
 
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Project Basics</h3>
+  const handleTimelineSelect = (value) => {
+    setProjectData((prev) => ({ ...prev, timeline: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e?.preventDefault();
+    calculateEstimate();
+    setShowResults(true);
+    toast.success("Project estimate generated!");
+
+    // Optional: Simulate email sending (commented as per liked code)
+    /*
+    try {
+      const response = await fetch('/api/send-estimate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estimate, projectData })
+      });
+      if (response.ok) {
+        toast.success('Estimate sent to your email!');
+      }
+    } catch (error) {
+      toast.error('Failed to send estimate');
+    }
+    */
+  };
+
+  const generateQuote = () => {
+    const quote = {
+      ...projectData,
+      estimate,
+      generatedAt: new Date().toISOString(),
+      quoteId: Math.random().toString(36).substr(2, 9).toUpperCase(),
+    };
+
+    const blob = new Blob([JSON.stringify(quote, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `project-quote-${quote.quoteId}.json`;
+    a.click();
+  };
+
+  const steps = [
+    { number: 1, title: "Project Type", completed: !!projectData.projectType },
+    { number: 2, title: "Features", completed: currentStep > 2 },
+    { number: 3, title: "Complexity", completed: !!projectData.complexity },
+    { number: 4, title: "Timeline", completed: !!projectData.timeline },
+    { number: 5, title: "Contact Info", completed: showResults },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+    >
+      {/* Header */}
+      <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-6 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-xl font-bold mb-2">Project Cost Estimator</h3>
+            <p className="text-green-100">
+              Get an instant estimate for your project. Perfect for planning
+              your budget!
+            </p>
+          </div>
+          <Calculator className="w-12 h-12 text-white/80" />
+        </div>
+      </div>
+
+      {/* Progress Steps */}
+      <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between">
+          {steps.map((step, index) => (
+            <div key={step.number} className="flex items-center">
+              <div
+                className={`
+                w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                ${
+                  step.completed
+                    ? "bg-green-500 text-white"
+                    : currentStep === step.number
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400"
+                }
+              `}
+              >
+                {step.completed ? (
+                  <CheckCircle className="w-4 h-4" />
+                ) : (
+                  step.number
+                )}
+              </div>
+              <span
+                className={`ml-2 text-sm font-medium ${
+                  step.completed || currentStep === step.number
+                    ? "text-gray-900 dark:text-white"
+                    : "text-gray-500 dark:text-gray-400"
+                }`}
+              >
+                {step.title}
+              </span>
+              {index < steps.length - 1 && (
+                <ArrowRight className="w-4 h-4 mx-4 text-gray-400" />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="p-6">
+        <AnimatePresence mode="wait">
+          {/* Step 1: Project Type */}
+          {currentStep === 1 && (
+            <motion.div
+              key="step1"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                What type of project do you need?
+              </h4>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="projectName">Project Name</Label>
@@ -170,307 +386,486 @@ Date: ${quote.date}
                     id="projectName"
                     placeholder="Enter your project name"
                     value={projectData.projectName}
-                    onChange={(e) => setProjectData(prev => ({ ...prev, projectName: e.target.value }))}
+                    onChange={(e) =>
+                      setProjectData({
+                        ...projectData,
+                        projectName: e.target.value,
+                      })
+                    }
                   />
                 </div>
-                
-                <div>
-                  <Label>Project Type</Label>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
-                    {projectTypes.map((type) => (
-                      <motion.div key={type.id} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                        <Card 
-                          className={`cursor-pointer transition-all ${
-                            projectData.projectType === type.id 
-                              ? 'ring-2 ring-primary bg-primary/5' 
-                              : 'hover:shadow-md'
-                          }`}
-                          onClick={() => setProjectData(prev => ({ ...prev, projectType: type.id }))}
-                        >
-                          <CardContent className="p-4 text-center">
-                            <div className="font-medium text-sm">{type.name}</div>
-                            <div className="text-xs text-muted-foreground mt-1">
-                              From ${type.basePrice.toLocaleString()}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-
                 <div>
                   <Label htmlFor="description">Project Description</Label>
                   <Textarea
                     id="description"
                     placeholder="Describe your project requirements..."
                     value={projectData.description}
-                    onChange={(e) => setProjectData(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={(e) =>
+                      setProjectData({
+                        ...projectData,
+                        description: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
-            </div>
-          </motion.div>
-        );
-
-      case 2:
-        return (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Project Complexity</h3>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <Label>Complexity Level</Label>
-                    <Badge variant="secondary">{projectData.complexity[0]}/10</Badge>
-                  </div>
-                  <Slider
-                    value={projectData.complexity}
-                    onValueChange={(value) => setProjectData(prev => ({ ...prev, complexity: value }))}
-                    max={10}
-                    min={1}
-                    step={1}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>Simple</span>
-                    <span>Complex</span>
-                  </div>
-                </div>
-
-                <div>
-                  <Label>Required Features</Label>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
-                    {features.map((feature) => (
-                      <motion.div key={feature.id} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                        <Card 
-                          className={`cursor-pointer transition-all ${
-                            projectData.features.includes(feature.id)
-                              ? 'ring-2 ring-primary bg-primary/5' 
-                              : 'hover:shadow-md'
-                          }`}
-                          onClick={() => toggleFeature(feature.id)}
-                        >
-                          <CardContent className="p-3">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <div className="font-medium text-sm">{feature.name}</div>
-                                <div className="text-xs text-muted-foreground">
-                                  +${feature.price}
-                                </div>
-                              </div>
-                              {projectData.features.includes(feature.id) && (
-                                <CheckCircle className="h-4 w-4 text-primary" />
-                              )}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {projectTypes.map((type) => (
+                  <motion.button
+                    key={type.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleProjectTypeSelect(type.id)}
+                    className="p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors text-left"
+                  >
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400">
+                        {type.icon}
+                      </div>
+                      <div>
+                        <h5 className="font-semibold text-gray-900 dark:text-white">
+                          {type.name}
+                        </h5>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {type.timeline}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                      {type.description}
+                    </p>
+                    <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                      Starting at ${type.basePrice.toLocaleString()}
+                    </p>
+                  </motion.button>
+                ))}
               </div>
-            </div>
-          </motion.div>
-        );
+            </motion.div>
+          )}
 
-      case 3:
-        return (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Timeline & Team</h3>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <Label>Timeline (weeks)</Label>
-                    <Badge variant="secondary">{projectData.timeline[0]} weeks</Badge>
-                  </div>
-                  <Slider
-                    value={projectData.timeline}
-                    onValueChange={(value) => setProjectData(prev => ({ ...prev, timeline: value }))}
-                    max={24}
-                    min={2}
-                    step={1}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>Rush (2 weeks)</span>
-                    <span>Extended (24 weeks)</span>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <Label>Team Size</Label>
-                    <Badge variant="secondary">{projectData.teamSize[0]} developers</Badge>
-                  </div>
-                  <Slider
-                    value={projectData.teamSize}
-                    onValueChange={(value) => setProjectData(prev => ({ ...prev, teamSize: value }))}
-                    max={8}
-                    min={1}
-                    step={1}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>Solo</span>
-                    <span>Large Team</span>
-                  </div>
-                </div>
+          {/* Step 2: Features */}
+          {currentStep === 2 && (
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center justify-between">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Select additional features
+                </h4>
+                <Button
+                  onClick={() => setCurrentStep(3)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  Continue
+                </Button>
               </div>
-            </div>
-          </motion.div>
-        );
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {features.map((feature) => (
+                  <motion.div
+                    key={feature.id}
+                    whileHover={{ scale: 1.01 }}
+                    className={`flex items-center space-x-3 border rounded-lg p-4 cursor-pointer transition-colors ${
+                      feature.included
+                        ? "border-green-500 bg-green-50 dark:bg-green-900/20"
+                        : projectData.features.includes(feature.id)
+                        ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                        : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                    }`}
+                    onClick={() =>
+                      !feature.included && handleFeatureToggle(feature.id)
+                    }
+                  >
+                    <Checkbox
+                      id={feature.id}
+                      checked={
+                        feature.included ||
+                        projectData.features.includes(feature.id)
+                      }
+                      onCheckedChange={() =>
+                        !feature.included && handleFeatureToggle(feature.id)
+                      }
+                      disabled={feature.included}
+                    />
+                    <div className="flex-1">
+                      <Label htmlFor={feature.id} className="font-medium">
+                        {feature.name}
+                      </Label>
+                      <p className="text-sm text-primary">
+                        {feature.included
+                          ? "Included"
+                          : `+$${feature.price.toLocaleString()}`}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-      case 4:
-        const cost = calculateCost();
-        return (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Project Estimate</h3>
-              
-              <Card className="bg-gradient-to-br from-primary/5 to-secondary/5">
+          {/* Step 3: Complexity */}
+          {currentStep === 3 && (
+            <motion.div
+              key="step3"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center justify-between">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  What's the complexity level?
+                </h4>
+                <Button
+                  onClick={() => setCurrentStep(4)}
+                  disabled={!projectData.complexity}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Continue
+                </Button>
+              </div>
+              <RadioGroup
+                value={projectData.complexity}
+                onValueChange={handleComplexitySelect}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                {complexityLevels.map((level) => (
+                  <motion.div
+                    key={level.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`flex items-center space-x-3 border rounded-lg p-4 cursor-pointer transition-colors ${
+                      projectData.complexity === level.id
+                        ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                        : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                    }`}
+                    onClick={() => handleComplexitySelect(level.id)}
+                  >
+                    <RadioGroupItem value={level.id} id={level.id} />
+                    <div className="flex-1">
+                      <Label htmlFor={level.id} className="font-medium">
+                        {level.name}
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        {level.description}
+                      </p>
+                      <p className="text-sm text-primary">
+                        {level.multiplier}x multiplier
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </RadioGroup>
+            </motion.div>
+          )}
+
+          {/* Step 4: Timeline */}
+          {currentStep === 4 && (
+            <motion.div
+              key="step4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center justify-between">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  What's your preferred timeline?
+                </h4>
+                <Button
+                  onClick={() => setCurrentStep(5)}
+                  disabled={!projectData.timeline}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Continue
+                </Button>
+              </div>
+              <RadioGroup
+                value={projectData.timeline}
+                onValueChange={handleTimelineSelect}
+                className="grid grid-cols-1 md:grid-cols-3 gap-4"
+              >
+                {timelines.map((timelineOpt) => (
+                  <motion.div
+                    key={timelineOpt.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`flex items-center space-x-3 border rounded-lg p-4 cursor-pointer transition-colors ${
+                      projectData.timeline === timelineOpt.id
+                        ? "border-orange-500 bg-orange-50 dark:bg-orange-900/20"
+                        : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                    }`}
+                    onClick={() => handleTimelineSelect(timelineOpt.id)}
+                  >
+                    <RadioGroupItem
+                      value={timelineOpt.id}
+                      id={timelineOpt.id}
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Clock className="w-5 h-5 text-orange-500" />
+                        <Label htmlFor={timelineOpt.id} className="font-medium">
+                          {timelineOpt.name}
+                        </Label>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {timelineOpt.description}
+                      </p>
+                      <p className="text-sm text-primary">
+                        {timelineOpt.multiplier}x multiplier
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </RadioGroup>
+
+              <div className="mt-6">
+                <Label className="flex items-center space-x-3">
+                  <Checkbox
+                    checked={projectData.maintenance}
+                    onCheckedChange={(checked) =>
+                      setProjectData((prev) => ({
+                        ...prev,
+                        maintenance: !!checked,
+                      }))
+                    }
+                  />
+                  <span className="text-muted-foreground">
+                    Include 6-month maintenance package (+15%)
+                  </span>
+                </Label>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Step 5: Contact Info & Results */}
+          {currentStep === 5 && !showResults && (
+            <motion.div
+              key="step5"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Contact Information
+              </h4>
+              <form
+                onSubmit={handleSubmit}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                <div>
+                  <Label htmlFor="contactName">Full Name *</Label>
+                  <Input
+                    id="contactName"
+                    placeholder="Your full name"
+                    value={projectData.contactName}
+                    onChange={(e) =>
+                      setProjectData({
+                        ...projectData,
+                        contactName: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="company">Company (Optional)</Label>
+                  <Input
+                    id="company"
+                    placeholder="Your company name"
+                    value={projectData.company}
+                    onChange={(e) =>
+                      setProjectData({
+                        ...projectData,
+                        company: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="contactEmail">Email *</Label>
+                  <Input
+                    id="contactEmail"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={projectData.contactEmail}
+                    onChange={(e) =>
+                      setProjectData({
+                        ...projectData,
+                        contactEmail: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="contactPhone">Phone (Optional)</Label>
+                  <Input
+                    id="contactPhone"
+                    placeholder="Your phone number"
+                    value={projectData.contactPhone}
+                    onChange={(e) =>
+                      setProjectData({
+                        ...projectData,
+                        contactPhone: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Button
+                    type="submit"
+                    className="w-full flex items-center justify-center space-x-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                  >
+                    <Calculator className="w-5 h-5" />
+                    <span>Get My Estimate</span>
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          )}
+
+          {/* Results */}
+          {showResults && estimate && (
+            <motion.div
+              key="results"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <div className="text-center">
+                <h4 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  Your Project Estimate
+                </h4>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Based on your requirements, here's your custom quote
+                </p>
+              </div>
+
+              <Card className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
                 <CardContent className="p-6">
                   <div className="text-center mb-6">
-                    <div className="text-4xl font-bold text-primary mb-2">
-                      ${cost.toLocaleString()}
-                    </div>
-                    <div className="text-muted-foreground">Estimated Project Cost</div>
+                    <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+                      ${estimate.total.toLocaleString()}
+                    </p>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      Estimated delivery: {estimate.timeline} weeks
+                    </p>
                   </div>
 
-                  <div className="grid md:grid-cols-3 gap-4 mb-6">
-                    <div className="text-center">
-                      <Clock className="h-8 w-8 mx-auto mb-2 text-blue-500" />
-                      <div className="font-semibold">{projectData.timeline[0]} weeks</div>
-                      <div className="text-sm text-muted-foreground">Timeline</div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Base Price ({estimate.breakdown.projectType})
+                      </span>
+                      <span className="font-medium">
+                        ${estimate.basePrice.toLocaleString()}
+                      </span>
                     </div>
-                    <div className="text-center">
-                      <Users className="h-8 w-8 mx-auto mb-2 text-green-500" />
-                      <div className="font-semibold">{projectData.teamSize[0]} developers</div>
-                      <div className="text-sm text-muted-foreground">Team Size</div>
+                    {estimate.featuresPrice > 0 && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Additional Features
+                        </span>
+                        <span className="font-medium">
+                          ${estimate.featuresPrice.toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Complexity ({estimate.breakdown.complexity})
+                      </span>
+                      <span className="font-medium">Applied</span>
                     </div>
-                    <div className="text-center">
-                      <Zap className="h-8 w-8 mx-auto mb-2 text-purple-500" />
-                      <div className="font-semibold">{projectData.features.length} features</div>
-                      <div className="text-sm text-muted-foreground">Features</div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Timeline ({estimate.breakdown.timelineType})
+                      </span>
+                      <span className="font-medium">Applied</span>
+                    </div>
+                    {estimate.maintenanceCost > 0 && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          6-Month Maintenance
+                        </span>
+                        <span className="font-medium">
+                          ${estimate.maintenanceCost.toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                    <hr className="border-gray-300 dark:border-gray-600" />
+                    <div className="flex justify-between text-lg font-bold">
+                      <span>Total</span>
+                      <span className="text-green-600 dark:text-green-400">
+                        ${estimate.total.toLocaleString()}
+                      </span>
                     </div>
                   </div>
-
-                  <div className="space-y-2">
-                    <h4 className="font-semibold">Project Summary:</h4>
-                    <div className="text-sm text-muted-foreground space-y-1">
-                      <div>• Project: {projectData.projectName}</div>
-                      <div>• Type: {projectTypes.find(t => t.id === projectData.projectType)?.name}</div>
-                      <div>• Complexity: {projectData.complexity[0]}/10</div>
-                      <div>• Features: {projectData.features.length} selected</div>
-                    </div>
-                  </div>
-
-                  <Button onClick={generateQuote} className="w-full mt-6">
-                    <Download className="mr-2 h-4 w-4" />
-                    Download Quote
-                  </Button>
                 </CardContent>
               </Card>
-            </div>
-          </motion.div>
-        );
 
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Progress */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Calculator className="h-5 w-5 text-primary" />
-          <span className="font-medium">Step {currentStep} of {totalSteps}</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: totalSteps }).map((_, index) => (
-            <div
-              key={index}
-              className={`w-3 h-3 rounded-full ${
-                index + 1 <= currentStep ? 'bg-primary' : 'bg-gray-300'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Step Content */}
-      <Card className="min-h-[400px]">
-        <CardContent className="p-6">
-          <AnimatePresence mode="wait">
-            {renderStep()}
-          </AnimatePresence>
-        </CardContent>
-      </Card>
-
-      {/* Navigation */}
-      <div className="flex items-center justify-between">
-        <Button
-          variant="outline"
-          onClick={prevStep}
-          disabled={currentStep === 1}
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Previous
-        </Button>
-
-        {currentStep < totalSteps ? (
-          <Button
-            onClick={nextStep}
-            disabled={
-              (currentStep === 1 && (!projectData.projectName || !projectData.projectType)) ||
-              (currentStep === 2 && projectData.features.length === 0)
-            }
-          >
-            Next
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        ) : (
-          <Button onClick={() => setCurrentStep(1)}>
-            Start New Estimate
-          </Button>
-        )}
-      </div>
-
-      {/* Live Cost Preview */}
-      {currentStep > 1 && currentStep < 4 && (
-        <Card className="bg-muted/50">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Current Estimate:</span>
-              <div className="flex items-center space-x-2">
-                <DollarSign className="h-4 w-4 text-green-600" />
-                <span className="text-lg font-bold text-green-600">
-                  ${calculateCost().toLocaleString()}
-                </span>
+              <div className="flex space-x-4">
+                <Button
+                  onClick={generateQuote}
+                  className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  <Download className="w-5 h-5" />
+                  <span>Download Quote</span>
+                </Button>
+                <Button
+                  onClick={() =>
+                    (window.location.href = `mailto:your@email.com?subject=Project Quote - ${
+                      estimate.breakdown.projectType
+                    }&body=Hi, I'm interested in discussing the ${
+                      estimate.breakdown.projectType
+                    } project estimated at $${estimate.total.toLocaleString()}.`)
+                  }
+                  className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                >
+                  <Mail className="w-5 h-5" />
+                  <span>Contact Me</span>
+                </Button>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+
+              <div className="text-center">
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setCurrentStep(1);
+                    setProjectData({
+                      projectName: "",
+                      projectType: "",
+                      description: "",
+                      features: [],
+                      complexity: "",
+                      timeline: "",
+                      budget: "",
+                      maintenance: false,
+                      contactName: "",
+                      contactEmail: "",
+                      contactPhone: "",
+                      company: "",
+                    });
+                    setShowResults(false);
+                    setEstimate(null);
+                  }}
+                  className="text-blue-500 hover:text-blue-600 transition-colors"
+                >
+                  Start New Estimate
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   );
 }
-
