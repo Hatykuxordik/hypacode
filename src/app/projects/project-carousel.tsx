@@ -40,6 +40,7 @@ export default function ProjectCarousel({
         responsive={responsive}
         infinite
         autoPlay
+        arrows={false}
         autoPlaySpeed={4000}
         keyBoardControl
         customTransition="transform 300ms ease-in-out"

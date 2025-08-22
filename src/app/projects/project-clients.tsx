@@ -33,7 +33,7 @@ export default function ProjectsClient() {
       </Section>
 
       {/* Featured Carousel */}
-      <Section className="md:py-20">
+      <Section className="md:py-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Featured Projects</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
