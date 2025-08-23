@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Smartphone, Tablet, Monitor, RotateCcw, ExternalLink } from "lucide-react";
+import {
+  Smartphone,
+  Tablet,
+  Monitor,
+  RotateCcw,
+  ExternalLink,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface Device {
@@ -17,17 +23,59 @@ interface Device {
 }
 
 const devices: Device[] = [
-  { name: "iPhone 14", width: 390, height: 844, icon: <Smartphone className="h-4 w-4" />, category: "mobile" },
-  { name: "iPhone 14 Plus", width: 428, height: 926, icon: <Smartphone className="h-4 w-4" />, category: "mobile" },
-  { name: "Samsung Galaxy S23", width: 360, height: 780, icon: <Smartphone className="h-4 w-4" />, category: "mobile" },
-  { name: "iPad", width: 768, height: 1024, icon: <Tablet className="h-4 w-4" />, category: "tablet" },
-  { name: "iPad Pro", width: 1024, height: 1366, icon: <Tablet className="h-4 w-4" />, category: "tablet" },
-  { name: "MacBook Air", width: 1280, height: 800, icon: <Monitor className="h-4 w-4" />, category: "desktop" },
-  { name: "Desktop HD", width: 1920, height: 1080, icon: <Monitor className="h-4 w-4" />, category: "desktop" },
+  {
+    name: "iPhone 14",
+    width: 390,
+    height: 844,
+    icon: <Smartphone className="h-4 w-4" />,
+    category: "mobile",
+  },
+  {
+    name: "iPhone 14 Plus",
+    width: 428,
+    height: 926,
+    icon: <Smartphone className="h-4 w-4" />,
+    category: "mobile",
+  },
+  {
+    name: "Samsung Galaxy S23",
+    width: 360,
+    height: 780,
+    icon: <Smartphone className="h-4 w-4" />,
+    category: "mobile",
+  },
+  {
+    name: "iPad",
+    width: 768,
+    height: 1024,
+    icon: <Tablet className="h-4 w-4" />,
+    category: "tablet",
+  },
+  {
+    name: "iPad Pro",
+    width: 1024,
+    height: 1366,
+    icon: <Tablet className="h-4 w-4" />,
+    category: "tablet",
+  },
+  {
+    name: "MacBook Air",
+    width: 1280,
+    height: 800,
+    icon: <Monitor className="h-4 w-4" />,
+    category: "desktop",
+  },
+  {
+    name: "Desktop HD",
+    width: 1920,
+    height: 1080,
+    icon: <Monitor className="h-4 w-4" />,
+    category: "desktop",
+  },
 ];
 
 export function ResponsiveDesignTester() {
-  const [url, setUrl] = useState("https://example.com");
+  const [url, setUrl] = useState("https://hatykuxordik.vercel.app/");
   const [selectedDevice, setSelectedDevice] = useState<Device>(devices[0]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
@@ -38,7 +86,7 @@ export function ResponsiveDesignTester() {
       toast.error("Please enter a valid URL");
       return;
     }
-    
+
     // Validate URL format
     try {
       new URL(url);
@@ -51,8 +99,20 @@ export function ResponsiveDesignTester() {
     }
   };
 
-  const currentWidth = isLandscape ? selectedDevice.height : selectedDevice.width;
-  const currentHeight = isLandscape ? selectedDevice.width : selectedDevice.height;
+  const currentWidth = isLandscape
+    ? selectedDevice.height
+    : selectedDevice.width;
+  const currentHeight = isLandscape
+    ? selectedDevice.width
+    : selectedDevice.height;
+
+  const maxPreviewWidth = 600;
+  const maxPreviewHeight = 400;
+  const scale = Math.min(
+    1,
+    maxPreviewWidth / currentWidth,
+    maxPreviewHeight / currentHeight
+  );
 
   return (
     <div className="space-y-6">
@@ -77,7 +137,9 @@ export function ResponsiveDesignTester() {
           {devices.map((device) => (
             <Button
               key={device.name}
-              variant={selectedDevice.name === device.name ? "default" : "outline"}
+              variant={
+                selectedDevice.name === device.name ? "default" : "outline"
+              }
               size="sm"
               onClick={() => setSelectedDevice(device)}
               className="flex flex-col h-auto p-3 text-xs"
@@ -96,13 +158,14 @@ export function ResponsiveDesignTester() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Badge variant="secondary">
-            {selectedDevice.category.charAt(0).toUpperCase() + selectedDevice.category.slice(1)}
+            {selectedDevice.category.charAt(0).toUpperCase() +
+              selectedDevice.category.slice(1)}
           </Badge>
           <Badge variant="outline">
             {currentWidth} × {currentHeight}px
           </Badge>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
@@ -112,11 +175,11 @@ export function ResponsiveDesignTester() {
             <RotateCcw className="h-4 w-4 mr-2" />
             {isLandscape ? "Portrait" : "Landscape"}
           </Button>
-          
+
           <Button
             variant="outline"
             size="sm"
-            onClick={() => window.open(url, '_blank')}
+            onClick={() => window.open(url, "_blank")}
           >
             <ExternalLink className="h-4 w-4 mr-2" />
             Open
@@ -130,39 +193,60 @@ export function ResponsiveDesignTester() {
           <CardTitle className="text-base flex items-center gap-2">
             {selectedDevice.icon}
             {selectedDevice.name} Preview
-            {isLandscape && <Badge variant="secondary" className="text-xs">Landscape</Badge>}
+            {isLandscape && (
+              <Badge variant="secondary" className="text-xs">
+                Landscape
+              </Badge>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-4">
           <div className="flex justify-center">
-            <div 
-              className="border-8 border-gray-800 rounded-lg overflow-hidden shadow-2xl bg-white"
+            <div
+              className="relative overflow-hidden border-8 border-gray-800 rounded-lg shadow-2xl"
               style={{
-                width: Math.min(currentWidth * 0.5, 600),
-                height: Math.min(currentHeight * 0.5, 400),
+                width: `${currentWidth * scale}px`,
+                height: `${currentHeight * scale}px`,
               }}
             >
-              {isLoading ? (
-                <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                    <p className="text-sm text-gray-600">Loading website...</p>
+              <div
+                className="absolute top-0 left-0 bg-white"
+                style={{
+                  width: `${currentWidth}px`,
+                  height: `${currentHeight}px`,
+                  transform: `scale(${scale})`,
+                  transformOrigin: "top left",
+                }}
+              >
+                {isLoading ? (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+                      <p className="text-sm text-gray-600">
+                        Loading website...
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <iframe
-                  src={url}
-                  className="w-full h-full border-0"
-                  title={`${selectedDevice.name} preview`}
-                  sandbox="allow-same-origin allow-scripts"
-                />
-              )}
+                ) : (
+                  <iframe
+                    src={url}
+                    className="w-full h-full border-0"
+                    title={`${selectedDevice.name} preview`}
+                    sandbox="allow-same-origin allow-scripts"
+                  />
+                )}
+              </div>
             </div>
           </div>
-          
+
           <div className="mt-4 text-center text-sm text-muted-foreground">
-            <p>Preview scaled to 50% for better visibility</p>
-            <p>Actual size: {currentWidth} × {currentHeight}px</p>
+            <p>
+              Preview scaled to {(scale * 100).toFixed(0)}% for better
+              visibility
+            </p>
+            <p>
+              Actual size: {currentWidth} × {currentHeight}px
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -185,4 +269,3 @@ export function ResponsiveDesignTester() {
     </div>
   );
 }
-
