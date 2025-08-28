@@ -78,7 +78,7 @@ export default function HomePage() {
       {/* === About Section === */}
       <AnimatedSection direction="right" delay={0.2}>
         <Section className="pt-2 pb-20 md:pt-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+          <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div className="space-y-6">
               <p className="text-primary text-lg font-medium">
