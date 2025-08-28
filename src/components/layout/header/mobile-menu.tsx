@@ -16,12 +16,12 @@ export function MobileMenu({ pathname }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet open={isOpen} onOpenChange={setIsOpen} className="md:hidden">
       <SheetTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="lg:hidden"
           aria-label="Toggle menu"
           onClick={() => setIsOpen(!isOpen)}
         >
