@@ -21,7 +21,7 @@ export function MobileMenu({ pathname }: Props) {
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden"
+          className="md:hidden"
           aria-label="Toggle menu"
           onClick={() => setIsOpen(!isOpen)}
         >

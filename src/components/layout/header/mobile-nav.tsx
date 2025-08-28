@@ -12,7 +12,7 @@ interface Props {
 
 export function MobileNav({ pathname }: Props) {
   return (
-    <nav className="flex-1 px-6 py-8 overflow-y-auto md:hidden">
+    <nav className="flex-1 px-6 py-8 overflow-y-auto">
       <div className="space-y-3">
         {navigation.map((item, i) => (
           <NavItem
