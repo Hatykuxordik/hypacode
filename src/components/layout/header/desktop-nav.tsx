@@ -6,7 +6,7 @@ export function DesktopNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden lg:flex items-center space-x-8">
+    <nav className="hidden md:flex items-center space-x-8">
       {navigation.map((item) => (
         <NavItem
           key={item.name}
