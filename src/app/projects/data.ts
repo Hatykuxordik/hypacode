@@ -51,7 +51,7 @@ export const projects = [
       "Taskify is an advanced productivity app that unifies task management and note-taking into a seamless experience. Users can create, organize, and prioritize tasks with due dates, track progress across categories, and gain insights with real-time task statistics. Alongside tasks, Taskify provides a rich note-taking system featuring tags, pinning, auto-save, and full-text search. The application supports secure authentication with Supabase (including Google OAuth), guest mode with local storage, dark/light themes, and real-time synchronization. Designed with a modern responsive UI, Taskify is mobile-ready, PWA-capable, and deployable on Vercel for global accessibility.",
     image: "/api/placeholder/600/400",
     tags: ["Next.js 14", "Supabase", "TypeScript", "TailwindCSS", "shadcn/ui"],
-    liveUrl: "https://banking-demo.hypacode.com",
+    liveUrl: "https://hypacode-taskify.vercel.app",
     githubUrl: "https://github.com/hatykuxordik/taskify",
     featured: true,
     category: "Web Application",
@@ -126,7 +126,7 @@ export const projects = [
       "Recharts",
       "PWA",
     ],
-    liveUrl: "https://fastpay-demo.hypacode.com", // replace with your deployed URL
+    liveUrl: "https://fastpayy.vercel.app/login", // replace with your deployed URL
     githubUrl: "https://github.com/hatykuxordik/fastpay", // update if repo exists
     featured: true,
     category: "Fintech / Web Application",
