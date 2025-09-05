@@ -68,7 +68,7 @@ export function MobileMenu({ pathname }: Props) {
               </div>
             </div>
 
-            <MobileNav pathname={pathname} />
+            <MobileNav pathname={pathname} setIsOpen={setIsOpen} />
             <MobileFooter />
           </div>
         </SheetContent>

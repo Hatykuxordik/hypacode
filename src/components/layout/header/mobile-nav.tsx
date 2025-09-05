@@ -8,14 +8,15 @@ import { socialLinks } from "./data/social-links";
 
 interface Props {
   pathname: string;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-export function MobileNav({ pathname }: Props) {
+export function MobileNav({ pathname, setIsOpen }: Props) {
   return (
     <nav className="flex-1 px-6 py-8 overflow-y-auto">
       <div className="space-y-3">
         {navigation.map((item, i) => (
-          <NavItem
+            <NavItem
             key={item.name}
             item={item}
             mobile
@@ -23,6 +24,7 @@ export function MobileNav({ pathname }: Props) {
             isActive={
               pathname === item.href || pathname.startsWith(item.href + "/")
             }
+            setIsOpen={setIsOpen}
           />
         ))}
       </div>

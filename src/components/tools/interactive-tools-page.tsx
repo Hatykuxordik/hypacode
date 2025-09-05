@@ -5,7 +5,6 @@ import { Section } from "@/components/ui/section";
 import { Card, CardContent } from "@/components/ui/card";
 import { ColorPaletteGenerator } from "@/components/tools/color-palette-generator";
 import { ResponsiveDesignTester } from "@/components/tools/responsive-design-tester";
-import { DragDropBuilder } from "@/components/tools/drag-drop-builder";
 import { CollaborationWhiteboard } from "@/components/tools/collaboration-whiteboard";
 import { ProjectCostEstimator } from "./project-cost-estimator";
 import {
@@ -38,19 +37,12 @@ const tools = [
     component: ResponsiveDesignTester,
   },
   {
-    id: "drag-drop",
-    name: "Drag & Drop Builder",
-    description: "Build layouts with drag and drop components",
-    icon: <Layout className="w-6 h-6" />,
-    color: "from-indigo-500 to-purple-500",
-    component: DragDropBuilder,
-  },
-  {
     id: "whiteboard",
     name: "Real-Time Collaboration Whiteboard",
     description: "Multi-user drawing with live collaboration features",
     icon: <Users className="w-6 h-6" />,
     color: "from-orange-500 to-yellow-500",
+    hidden: "hidden md:block",
     component: CollaborationWhiteboard,
   },
   {
@@ -120,7 +112,7 @@ export function InteractiveToolsPage() {
                 className={`flex items-center space-x-3 px-6 py-4 rounded-2xl font-semibold transition-all duration-300 ${
                   activeTool === tool.id
                     ? `bg-gradient-to-r ${tool.color} text-white shadow-lg`
-                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:shadow-lg"
+                    : `bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:shadow-lg ${tool?.hidden}`
                 }`}
               >
                 {tool.icon}
@@ -159,17 +151,6 @@ export function InteractiveToolsPage() {
                 transition={{ duration: 0.3 }}
               >
                 <ResponsiveDesignTester />
-              </motion.div>
-            )}
-            {activeTool === "drag-drop" && (
-              <motion.div
-                key="drag-drop"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <DragDropBuilder />
               </motion.div>
             )}
             {activeTool === "whiteboard" && (

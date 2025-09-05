@@ -5,15 +5,9 @@ import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import {
-  ExternalLink,
-  Github,
-  Code,
-  Eye,
-  Star,
-  GitFork,
-  Calendar,
-} from "lucide-react";
+import { ExternalLink, Code, Eye, Star, GitFork, Calendar } from "lucide-react";
+import { GithubIcon } from "@/components/icons";
+import Image from "next/image";
 
 interface Project {
   title: string;
@@ -39,7 +33,11 @@ export default function ProjectCard({
   onDetails,
   featured = false,
 }: ProjectCardProps) {
-  const formattedDate = new Date(project.date).toLocaleDateString();
+  const formattedDate = new Date(project.date).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 
   return (
     <motion.div
@@ -67,9 +65,13 @@ export default function ProjectCard({
         >
           {project.status}
         </Badge>
-        <div className="text-4xl font-bold text-primary/20">
-          {project.title.charAt(0)}
-        </div>
+        <Image
+          src={(project as any).image}
+          alt={project.title}
+          width={600}
+          height={100}
+          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+        />
       </div>
 
       <CardContent className="p-6 flex flex-col flex-1">
@@ -77,7 +79,7 @@ export default function ProjectCard({
           <div>
             <h3 className="text-xl font-bold mb-2">{project.title}</h3>
             <Badge variant="secondary" className="mb-3">
-              {project.category}
+              {project.category.split(" ")[0]}
             </Badge>
           </div>
           <div className="flex items-center space-x-2">
@@ -88,7 +90,7 @@ export default function ProjectCard({
             </Button>
             <Button size="sm" variant="outline" asChild>
               <Link href={project.githubUrl} target="_blank">
-                <Github className="h-4 w-4" />
+                <GithubIcon className="h-4 w-4" />
               </Link>
             </Button>
           </div>

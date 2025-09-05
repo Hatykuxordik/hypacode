@@ -5,7 +5,7 @@ Disallow: /api/
 Disallow: /admin/
 
 # Host
-Host: https://hypacode.vercel.app/
+Host: https://hypacode.com
 
 # Sitemaps
-Sitemap: https://hypacode.vercel.app/sitemap.xml
+Sitemap: https://hypacode.com/sitemap.xml

@@ -61,6 +61,14 @@ const toolsList = [
 ];
 
 export function CollaborationWhiteboard() {
+  return (
+    <div className="hidden md:block">
+      <CollaborationWhiteboardContent />
+    </div>
+  );
+}
+
+function CollaborationWhiteboardContent() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentTool, setCurrentTool] = useState<"brush" | "eraser" | "rectangle" | "circle" | "line">("brush");

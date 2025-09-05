@@ -15,7 +15,9 @@ export default function ProjectsClient() {
   const filteredProjects =
     selectedCategory === "all"
       ? projects
-      : projects.filter((p) => p.category === selectedCategory);
+      : projects.filter((p) =>
+          p.category.toLowerCase().includes(selectedCategory.replace("-", " "))
+        );
 
   const featuredProjects = projects.filter((p) => p.featured);
 

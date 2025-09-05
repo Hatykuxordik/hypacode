@@ -78,7 +78,7 @@ export default function HomePage() {
       {/* === About Section === */}
       <AnimatedSection direction="right" delay={0.2}>
         <Section className="pt-2 pb-20 md:pt-20 px-4 sm:px-6 mg:px-8">
-          <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Content */}
             <div className="space-y-6">
               <p className="text-primary text-lg font-medium">
@@ -86,12 +86,12 @@ export default function HomePage() {
               </p>
               <StaggeredText
                 text="Sodiq Atiku"
-                className="text-6xl font-bold text-primary"
+                className="text-4xl sm:text-5xl lg:text-6xl font-bold text-primary"
               />
-              <h3 className="text-2xl font-semibold text-muted-foreground">
+              <h3 className="text-xl sm:text-2xl font-semibold text-muted-foreground">
                 Frontend Developer
               </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                 Solution-oriented frontend developer with over 3 years of
                 experience building responsive, user-friendly, and visually
                 engaging applications using React.js, Next.js, and TypeScript.
@@ -142,7 +142,7 @@ export default function HomePage() {
       {/* === Stats Section === */}
       <AnimatedSection delay={0.3}>
         <Section className="bg-muted/50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
             {stats.map((stat, i) => (
               <FloatingCard key={stat.label} delay={(i + 1) * 0.1}>
                 <StatsCard
@@ -163,7 +163,7 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <StaggeredText
               text="Core Technologies"
-              className="text-3xl font-bold mb-4"
+              className="text-2xl sm:text-3xl font-bold mb-4"
             />
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Tools and frameworks I use to build high-performance web

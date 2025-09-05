@@ -7,6 +7,7 @@ interface NavItemProps {
   isActive: boolean;
   mobile?: boolean;
   index?: number;
+  setIsOpen?: (isOpen: boolean) => void;
 }
 
 export function NavItem({
@@ -27,6 +28,7 @@ export function NavItem({
         <Link
           href={item.href}
           aria-current={isActive ? "page" : undefined}
+          onClick={() => setIsOpen && setIsOpen(false)}
           className={`group flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 relative ${
             isActive
               ? "bg-primary/10 text-primary shadow-sm"

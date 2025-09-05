@@ -44,7 +44,7 @@ const projectTypes = [
     id: "landing",
     name: "Landing Page",
     description: "Single page website with modern design",
-    basePrice: 1500,
+    basePrice: 350,
     timeline: "1-2 weeks",
     icon: <Globe className="w-6 h-6" />,
   },
@@ -52,56 +52,56 @@ const projectTypes = [
     id: "business",
     name: "Business Website",
     description: "Multi-page corporate website",
-    basePrice: 3000,
-    timeline: "3-4 weeks",
+    basePrice: 1500,
+    timeline: "2-3 weeks",
     icon: <Users className="w-6 h-6" />,
   },
   {
     id: "ecommerce",
     name: "E-commerce",
     description: "Online store with payment integration",
-    basePrice: 5000,
-    timeline: "6-8 weeks",
+    basePrice: 3000,
+    timeline: "3-6 weeks",
     icon: <DollarSign className="w-6 h-6" />,
   },
   {
     id: "webapp",
     name: "Web Application",
     description: "Custom web application with database",
-    basePrice: 8000,
-    timeline: "8-12 weeks",
+    basePrice: 4000,
+    timeline: "6-10 weeks",
     icon: <Database className="w-6 h-6" />,
   },
   {
     id: "mobile",
     name: "Mobile App",
     description: "Native or hybrid mobile application",
-    basePrice: 12000,
-    timeline: "12-16 weeks",
+    basePrice: 6000,
+    timeline: "10-14 weeks",
     icon: <Smartphone className="w-6 h-6" />,
   },
   {
     id: "custom",
     name: "Custom Solution",
     description: "Tailored solution for specific needs",
-    basePrice: 15000,
+    basePrice: 7000,
     timeline: "Varies",
     icon: <Calculator className="w-6 h-6" />,
   },
 ];
 
 const features = [
-  { id: "responsive", name: "Responsive Design", price: 500, included: true },
-  { id: "cms", name: "Content Management System", price: 1500 },
-  { id: "seo", name: "SEO Optimization", price: 800 },
-  { id: "analytics", name: "Analytics Integration", price: 300 },
-  { id: "social", name: "Social Media Integration", price: 400 },
-  { id: "payment", name: "Payment Gateway", price: 1200 },
-  { id: "api", name: "Third-party API Integration", price: 1000 },
-  { id: "multilingual", name: "Multi-language Support", price: 1500 },
-  { id: "auth", name: "User Authentication", price: 1200 },
-  { id: "chat", name: "Live Chat Support", price: 600 },
-  { id: "admin", name: "Admin Panel", price: 2000 },
+  { id: "responsive", name: "Responsive Design", price: 150, included: true },
+  { id: "cms", name: "Content Management System", price: 350 },
+  { id: "seo", name: "SEO Optimization", price: 100 },
+  { id: "analytics", name: "Analytics Integration", price: 80 },
+  { id: "social", name: "Social Media Integration", price: 90 },
+  { id: "payment", name: "Payment Gateway", price: 300 },
+  { id: "api", name: "Third-party API Integration", price: 250 },
+  { id: "multilingual", name: "Multi-language Support", price: 300 },
+  { id: "auth", name: "User Authentication", price: 250 },
+  { id: "chat", name: "Live Chat Support", price: 180 },
+  { id: "admin", name: "Admin Panel", price: 1500 },
 ];
 
 const complexityLevels = [
@@ -134,13 +134,13 @@ const complexityLevels = [
 const timelines = [
   {
     id: "rush",
-    name: "Rush (1-2 weeks)",
+    name: "Rush (3-14 days)",
     multiplier: 1.5,
     description: "Expedited delivery",
   },
   {
     id: "standard",
-    name: "Standard (3-6 weeks)",
+    name: "Standard (1-3 weeks)",
     multiplier: 1,
     description: "Normal timeline",
   },
@@ -327,7 +327,7 @@ export function ProjectCostEstimator() {
 
       {/* Progress Steps */}
       <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between">
+        <div className="flex  items-center overflow-x-auto flex-nowrap justify-between">
           {steps.map((step, index) => (
             <div key={step.number} className="flex items-center">
               <div
@@ -381,7 +381,9 @@ export function ProjectCostEstimator() {
               </h4>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="projectName">Project Name</Label>
+                  <Label htmlFor="projectName" className="mb-2">
+                    Project Name
+                  </Label>
                   <Input
                     id="projectName"
                     placeholder="Enter your project name"
@@ -395,7 +397,9 @@ export function ProjectCostEstimator() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="description">Project Description</Label>
+                  <Label htmlFor="description" className="mb-2">
+                    Project Description
+                  </Label>
                   <Textarea
                     id="description"
                     placeholder="Describe your project requirements..."
@@ -409,7 +413,7 @@ export function ProjectCostEstimator() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {projectTypes.map((type) => (
                   <motion.button
                     key={type.id}
@@ -463,7 +467,7 @@ export function ProjectCostEstimator() {
                   Continue
                 </Button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {features.map((feature) => (
                   <motion.div
                     key={feature.id}
@@ -530,7 +534,7 @@ export function ProjectCostEstimator() {
               <RadioGroup
                 value={projectData.complexity}
                 onValueChange={handleComplexitySelect}
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
               >
                 {complexityLevels.map((level) => (
                   <motion.div
@@ -586,7 +590,7 @@ export function ProjectCostEstimator() {
               <RadioGroup
                 value={projectData.timeline}
                 onValueChange={handleTimelineSelect}
-                className="grid grid-cols-1 md:grid-cols-3 gap-4"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
               >
                 {timelines.map((timelineOpt) => (
                   <motion.div
@@ -655,7 +659,7 @@ export function ProjectCostEstimator() {
               </h4>
               <form
                 onSubmit={handleSubmit}
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
               >
                 <div>
                   <Label htmlFor="contactName">Full Name *</Label>
@@ -812,7 +816,7 @@ export function ProjectCostEstimator() {
                 </CardContent>
               </Card>
 
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <Button
                   onClick={generateQuote}
                   className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
@@ -822,7 +826,7 @@ export function ProjectCostEstimator() {
                 </Button>
                 <Button
                   onClick={() =>
-                    (window.location.href = `mailto:your@email.com?subject=Project Quote - ${
+                    (window.location.href = `mailto:hatykuxordik@gmail.com?subject=Project Quote - ${
                       estimate.breakdown.projectType
                     }&body=Hi, I'm interested in discussing the ${
                       estimate.breakdown.projectType
