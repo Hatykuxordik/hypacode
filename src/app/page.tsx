@@ -16,6 +16,7 @@ import AnimatedProfilePic from "@/components/ui/AnimatedProfilePic";
 
 // SEO / JSON-LD
 import { organizationSchema, personSchema, websiteSchema } from "@/lib/json-ld";
+import { AIProjectExplorer } from "@/components/ui/ai-project-explorer";
 
 // Next.js Static Rendering
 export const dynamic = "force-static";
