@@ -126,7 +126,7 @@ export const projects = [
       "Recharts",
       "PWA",
     ],
-    liveUrl: "https://fastpayy.vercel.app/login",
+    liveUrl: "https://fastpayy.vercel.app/",
     githubUrl: "https://github.com/hatykuxordik/fastpay",
     featured: true,
     category: "Fintech Web Application Mobile",
