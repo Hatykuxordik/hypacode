@@ -604,9 +604,9 @@ export function FloatingAIAssistant() {
 
     // Default response for unmatched queries
     return {
-      content: `I'm the AI assistant specialized in Hypacode's portfolio and Sodiq Atiku's work. I can provide detailed info on projects, skills, experience, education, certifications, tools, and more. For example, ask about "Sodiq's experience", "React projects", or "core values". For general or complex questions outside this scope, I recommend using Grok at https://x.ai. What about the portfolio would you like to explore?`,
+      content: `I'm Hypacode's specialized AI assistant, dedicated to providing in-depth information about Sodiq Atiku's portfolio and professional work. I can share detailed insights on projects, skills, experience, education, certifications, tools, and more. For example, you can ask about 'Sodiq's experience,' 'React projects,' or 'core values.' For broader or more complex questions beyond this scope, you can explore further with Grok at https://x.ai or ChatGPT at https://chat.openai.com. What aspect of Sodiq's portfolio would you like to dive into?`,
       formattedContent: {
-        text: `I'm the AI assistant specialized in Hypacode's portfolio and Sodiq Atiku's work. I can provide detailed info on projects, skills, experience, education, certifications, tools, and more. For example, ask about "Sodiq's experience", "React projects", or "core values". For general or complex questions outside this scope, I recommend using Grok at https://x.ai. What about the portfolio would you like to explore?`,
+        text: `I'm Hypacode's specialized AI assistant, dedicated to providing in-depth information about Sodiq Atiku's portfolio and professional work. I can share detailed insights on projects, skills, experience, education, certifications, tools, and more. For example, you can ask about 'Sodiq's experience,' 'React projects,' or 'core values.' For broader or more complex questions beyond this scope, you can explore further with Grok at https://x.ai or ChatGPT at https://chat.openai.com. What aspect of Sodiq's portfolio would you like to dive into?`,
       },
     };
   };
