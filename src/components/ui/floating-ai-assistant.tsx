@@ -651,7 +651,7 @@ export function FloatingAIAssistant() {
               height: isMinimized ? "auto" : "500px",
             }}
             exit={{ scale: 0, opacity: 0, x: 100, y: 100 }}
-            className="fixed bottom-12 right-6 z-50 w-80 sm:w-96"
+            className="fixed bottom-20 md:bottom-12 right-6 z-50 w-80 sm:w-96"
           >
             <Card className="relative shadow-2xl border-2">
               {/* Header */}
