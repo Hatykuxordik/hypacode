@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Section } from "@/components/ui/section";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { StaggeredText } from "@/components/ui/staggered-text";
@@ -26,6 +26,9 @@ import {
   Filter,
   SortAsc,
   SortDesc,
+  ExternalLink,
+  RefreshCw,
+  Loader2,
 } from "lucide-react";
 
 interface BlogPost {
@@ -39,9 +42,13 @@ interface BlogPost {
   readTime: number;
   slug: string;
   featured: boolean;
+  url?: string;
+  source?: string;
+  isExternal?: boolean;
 }
 
-const blogPosts: BlogPost[] = [
+// Static blog posts (original content)
+const staticBlogPosts: BlogPost[] = [
   {
     id: "1",
     title: "Optimizing Next.js Performance for Core Web Vitals",
@@ -84,76 +91,6 @@ const blogPosts: BlogPost[] = [
     slug: "demystifying-typescript",
     featured: true,
   },
-  {
-    id: "4",
-    title: "Building Interactive UIs with Framer Motion",
-    description:
-      "Explore the power of Framer Motion to create stunning and performant animations and gestures in your React applications.",
-    content:
-      "Animation brings life to user interfaces. Learn how to use Framer Motion effectively...",
-    date: "2025-01-08",
-    tags: ["Framer Motion", "React", "Animations", "UI/UX"],
-    category: "React",
-    readTime: 7,
-    slug: "building-interactive-uis-with-framer-motion",
-    featured: false,
-  },
-  {
-    id: "5",
-    title: "Advanced React Patterns: Compound Components",
-    description:
-      "Deep dive into compound components pattern in React, exploring how to build flexible and reusable component APIs.",
-    content:
-      "Compound components are a powerful pattern for building flexible React components...",
-    date: "2025-01-05",
-    tags: ["React", "Design Patterns", "Components", "Advanced"],
-    category: "React",
-    readTime: 12,
-    slug: "advanced-react-patterns-compound-components",
-    featured: true,
-  },
-  {
-    id: "6",
-    title: "State Management in Modern React Applications",
-    description:
-      "Compare different state management solutions for React applications, from useState to Zustand and Redux Toolkit.",
-    content:
-      "State management is crucial for complex React applications. Let's explore the options...",
-    date: "2025-01-03",
-    tags: ["React", "State Management", "Redux", "Zustand"],
-    category: "React",
-    readTime: 9,
-    slug: "state-management-modern-react",
-    featured: false,
-  },
-  {
-    id: "7",
-    title: "CSS Grid vs Flexbox: When to Use Which",
-    description:
-      "A practical guide to choosing between CSS Grid and Flexbox for different layout scenarios in modern web development.",
-    content:
-      "Understanding when to use CSS Grid vs Flexbox is essential for modern web developers...",
-    date: "2025-01-01",
-    tags: ["CSS", "Grid", "Flexbox", "Layout"],
-    category: "CSS",
-    readTime: 5,
-    slug: "css-grid-vs-flexbox",
-    featured: false,
-  },
-  {
-    id: "8",
-    title: "Building Accessible Web Applications",
-    description:
-      "Essential techniques and best practices for creating web applications that are accessible to all users.",
-    content:
-      "Accessibility should be a priority in every web project. Here's how to build inclusive applications...",
-    date: "2024-12-28",
-    tags: ["Accessibility", "A11y", "Web Standards", "UX"],
-    category: "Accessibility",
-    readTime: 11,
-    slug: "building-accessible-web-applications",
-    featured: true,
-  },
 ];
 
 const categories = [
@@ -163,7 +100,11 @@ const categories = [
   "CSS",
   "Programming",
   "Accessibility",
+  "Frontend News",
+  "Browser Features",
+  "Tools",
 ];
+
 const sortOptions = [
   { value: "date-desc", label: "Newest First" },
   { value: "date-asc", label: "Oldest First" },
@@ -178,11 +119,148 @@ export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("date-desc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [apiPosts, setApiPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const postsPerPage = 6;
+
+  // Fetch articles from multiple APIs
+  const fetchArticles = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const articles: BlogPost[] = [];
+      
+      // Fetch from DEV.to API (free, no key required)
+      try {
+        const devResponse = await fetch(
+          'https://dev.to/api/articles?tag=frontend&tag=javascript&tag=react&tag=css&per_page=20&top=7'
+        );
+        
+        if (devResponse.ok) {
+          const devArticles = await devResponse.json();
+          
+          devArticles.forEach((article: any, index: number) => {
+            articles.push({
+              id: `dev-${article.id}`,
+              title: article.title,
+              description: article.description || article.title,
+              content: article.body_markdown || article.description || "",
+              date: article.published_at.split('T')[0],
+              tags: article.tag_list || [],
+              category: "Frontend News",
+              readTime: article.reading_time_minutes || 5,
+              slug: `dev-${article.slug}`,
+              featured: index < 3,
+              url: article.url,
+              source: "DEV.to",
+              isExternal: true,
+            });
+          });
+        }
+      } catch (devError) {
+        console.warn('DEV.to API error:', devError);
+      }
+
+      // Fetch from Hacker News API for tech articles
+      try {
+        const hnResponse = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+        if (hnResponse.ok) {
+          const storyIds = await hnResponse.json();
+          
+          // Get first 10 stories
+          const storyPromises = storyIds.slice(0, 10).map(async (id: number) => {
+            const storyResponse = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
+            return storyResponse.json();
+          });
+          
+          const stories = await Promise.all(storyPromises);
+          
+          stories.forEach((story: any, index: number) => {
+            if (story && story.title && (
+              story.title.toLowerCase().includes('frontend') ||
+              story.title.toLowerCase().includes('javascript') ||
+              story.title.toLowerCase().includes('react') ||
+              story.title.toLowerCase().includes('css') ||
+              story.title.toLowerCase().includes('web') ||
+              story.title.toLowerCase().includes('browser')
+            )) {
+              articles.push({
+                id: `hn-${story.id}`,
+                title: story.title,
+                description: story.title,
+                content: story.text || story.title,
+                date: new Date(story.time * 1000).toISOString().split('T')[0],
+                tags: ["Tech News", "Frontend"],
+                category: "Frontend News",
+                readTime: 3,
+                slug: `hn-${story.id}`,
+                featured: false,
+                url: story.url || `https://news.ycombinator.com/item?id=${story.id}`,
+                source: "Hacker News",
+                isExternal: true,
+              });
+            }
+          });
+        }
+      } catch (hnError) {
+        console.warn('Hacker News API error:', hnError);
+      }
+
+      // Fetch from GitHub trending repositories (frontend related)
+      try {
+        const githubResponse = await fetch(
+          'https://api.github.com/search/repositories?q=frontend+javascript+react+vue+angular&sort=updated&order=desc&per_page=10'
+        );
+        
+        if (githubResponse.ok) {
+          const githubData = await githubResponse.json();
+          
+          githubData.items.forEach((repo: any, index: number) => {
+            articles.push({
+              id: `github-${repo.id}`,
+              title: `${repo.name}: ${repo.description || 'Frontend Repository'}`,
+              description: repo.description || `A trending frontend repository: ${repo.name}`,
+              content: repo.description || "",
+              date: repo.updated_at.split('T')[0],
+              tags: ["GitHub", "Open Source", "Tools"],
+              category: "Tools",
+              readTime: 2,
+              slug: `github-${repo.name}`,
+              featured: false,
+              url: repo.html_url,
+              source: "GitHub",
+              isExternal: true,
+            });
+          });
+        }
+      } catch (githubError) {
+        console.warn('GitHub API error:', githubError);
+      }
+
+      setApiPosts(articles);
+    } catch (err) {
+      setError('Failed to fetch articles. Please try again later.');
+      console.error('Error fetching articles:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch articles on component mount
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  // Combine static and API posts
+  const allPosts = useMemo(() => {
+    return [...staticBlogPosts, ...apiPosts];
+  }, [apiPosts]);
 
   // Filter and sort posts
   const filteredAndSortedPosts = useMemo(() => {
-    let filtered = blogPosts.filter((post) => {
+    let filtered = allPosts.filter((post) => {
       const matchesSearch =
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -217,7 +295,7 @@ export default function BlogPage() {
     });
 
     return filtered;
-  }, [searchQuery, selectedCategory, sortBy]);
+  }, [allPosts, searchQuery, selectedCategory, sortBy]);
 
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedPosts.length / postsPerPage);
@@ -226,22 +304,43 @@ export default function BlogPage() {
     currentPage * postsPerPage
   );
 
-  const featuredPosts = blogPosts.filter((post) => post.featured).slice(0, 3);
+  const featuredPosts = allPosts.filter((post) => post.featured).slice(0, 3);
 
   return (
     <div className="min-h-screen py-12 sm:py-16 lg:py-20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <AnimatedSection>
-          <Section className="text-center mb-12 sm:mb-16">
-            <StaggeredText
-              text="Hypacode Insights"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6"
-            />
+          <Section className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Hypacode <span className="text-primary">Insights</span>
+            </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
-              Thoughts, tutorials, and deep dives into frontend development and
-              beyond.
+              Thoughts, tutorials, and the latest frontend development news from around the web.
             </p>
+            
+            {/* Refresh Button */}
+            <div className="mt-6">
+              <Button
+                onClick={fetchArticles}
+                disabled={loading}
+                variant="outline"
+                className="gap-2"
+              >
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <RefreshCw className="h-4 w-4" />
+                )}
+                {loading ? "Fetching Latest..." : "Refresh Articles"}
+              </Button>
+            </div>
+
+            {error && (
+              <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+                <p className="text-destructive text-sm">{error}</p>
+              </div>
+            )}
           </Section>
         </AnimatedSection>
 
@@ -254,52 +353,111 @@ export default function BlogPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {featuredPosts.map((post, index) => (
                 <FloatingCard key={post.id} delay={index * 0.1}>
-                  <Link href={`/blog/${post.slug}`}>
-                    <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-300 border-2 border-primary/20">
-                      <CardHeader>
-                        <div className="flex items-center justify-between mb-2">
-                          <Badge
-                            variant="default"
-                            className="bg-primary/10 text-primary"
-                          >
-                            Featured
-                          </Badge>
-                          <div className="flex items-center text-sm text-muted-foreground">
-                            <Clock className="h-3 w-3 mr-1" />
-                            <span>{post.readTime} min</span>
-                          </div>
-                        </div>
-                        <CardTitle className="text-lg sm:text-xl font-semibold mb-2 line-clamp-2">
-                          {post.title}
-                        </CardTitle>
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          <span>
-                            {new Date(post.date).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="flex-1">
-                        <p className="text-muted-foreground mb-4 line-clamp-3">
-                          {post.description}
-                        </p>
-                        <div className="flex flex-wrap gap-1 mb-4">
-                          {post.tags.slice(0, 3).map((tag) => (
+                  {post.isExternal ? (
+                    <a href={post.url} target="_blank" rel="noopener noreferrer">
+                      <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-300 border-2 border-primary/20">
+                        <CardHeader>
+                          <div className="flex items-center justify-between mb-2">
                             <Badge
-                              key={tag}
-                              variant="outline"
-                              className="text-xs"
+                              variant="default"
+                              className="bg-primary/10 text-primary"
                             >
-                              {tag}
+                              Featured
                             </Badge>
-                          ))}
-                        </div>
-                        <div className="flex items-center text-primary font-medium text-sm">
-                          Read more <ArrowRight className="h-3 w-3 ml-1" />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center text-sm text-muted-foreground">
+                                <Clock className="h-3 w-3 mr-1" />
+                                <span>{post.readTime} min</span>
+                              </div>
+                              <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                            </div>
+                          </div>
+                          <CardTitle className="text-lg sm:text-xl font-semibold mb-2 line-clamp-2">
+                            {post.title}
+                          </CardTitle>
+                          <div className="flex items-center justify-between text-sm text-muted-foreground">
+                            <div className="flex items-center">
+                              <Calendar className="h-4 w-4 mr-1" />
+                              <span>
+                                {new Date(post.date).toLocaleDateString()}
+                              </span>
+                            </div>
+                            {post.source && (
+                              <Badge variant="outline" className="text-xs">
+                                {post.source}
+                              </Badge>
+                            )}
+                          </div>
+                        </CardHeader>
+                        <CardContent className="flex-1">
+                          <p className="text-muted-foreground mb-4 line-clamp-3">
+                            {post.description}
+                          </p>
+                          <div className="flex flex-wrap gap-1 mb-4">
+                            {post.tags.slice(0, 3).map((tag) => (
+                              <Badge
+                                key={tag}
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="flex items-center text-primary font-medium text-sm">
+                            Read more <ArrowRight className="h-3 w-3 ml-1" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </a>
+                  ) : (
+                    <Link href={`/blog/${post.slug}`}>
+                      <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-300 border-2 border-primary/20">
+                        <CardHeader>
+                          <div className="flex items-center justify-between mb-2">
+                            <Badge
+                              variant="default"
+                              className="bg-primary/10 text-primary"
+                            >
+                              Featured
+                            </Badge>
+                            <div className="flex items-center text-sm text-muted-foreground">
+                              <Clock className="h-3 w-3 mr-1" />
+                              <span>{post.readTime} min</span>
+                            </div>
+                          </div>
+                          <CardTitle className="text-lg sm:text-xl font-semibold mb-2 line-clamp-2">
+                            {post.title}
+                          </CardTitle>
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            <span>
+                              {new Date(post.date).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="flex-1">
+                          <p className="text-muted-foreground mb-4 line-clamp-3">
+                            {post.description}
+                          </p>
+                          <div className="flex flex-wrap gap-1 mb-4">
+                            {post.tags.slice(0, 3).map((tag) => (
+                              <Badge
+                                key={tag}
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="flex items-center text-primary font-medium text-sm">
+                            Read more <ArrowRight className="h-3 w-3 ml-1" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  )}
                 </FloatingCard>
               ))}
             </div>
@@ -371,6 +529,11 @@ export default function BlogPage() {
               <div className="text-sm text-muted-foreground">
                 Showing {paginatedPosts.length} of{" "}
                 {filteredAndSortedPosts.length} articles
+                {apiPosts.length > 0 && (
+                  <span className="ml-2">
+                    ({apiPosts.length} from external sources)
+                  </span>
+                )}
               </div>
             </div>
           </Section>
@@ -379,76 +542,136 @@ export default function BlogPage() {
         {/* Blog Posts Grid */}
         <AnimatedSection delay={0.4}>
           <Section className="mb-12">
+            {loading && (
+              <div className="text-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+                <p className="text-muted-foreground">Loading latest articles...</p>
+              </div>
+            )}
+            
             {paginatedPosts.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {paginatedPosts.map((post, index) => (
                   <FloatingCard key={post.id} delay={index * 0.1}>
-                    <Link href={`/blog/${post.slug}`}>
-                      <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-300">
-                        <CardHeader>
-                          <div className="flex items-center justify-between mb-2">
-                            <Badge variant="outline" className="text-xs">
-                              {post.category}
-                            </Badge>
-                            <div className="flex items-center text-sm text-muted-foreground">
-                              <Clock className="h-3 w-3 mr-1" />
-                              <span>{post.readTime} min</span>
-                            </div>
-                          </div>
-                          <CardTitle className="text-lg sm:text-xl font-semibold mb-2 line-clamp-2">
-                            {post.title}
-                          </CardTitle>
-                          <div className="flex items-center text-sm text-muted-foreground">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            <span>
-                              {new Date(post.date).toLocaleDateString()}
-                            </span>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="flex-1">
-                          <p className="text-muted-foreground mb-4 line-clamp-3">
-                            {post.description}
-                          </p>
-                          <div className="flex flex-wrap gap-1 mb-4">
-                            {post.tags.slice(0, 3).map((tag) => (
-                              <Badge
-                                key={tag}
-                                variant="outline"
-                                className="text-xs"
-                              >
-                                <Tag className="h-2 w-2 mr-1" />
-                                {tag}
-                              </Badge>
-                            ))}
-                            {post.tags.length > 3 && (
+                    {post.isExternal ? (
+                      <a href={post.url} target="_blank" rel="noopener noreferrer">
+                        <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-300">
+                          <CardHeader>
+                            <div className="flex items-center justify-between mb-2">
                               <Badge variant="outline" className="text-xs">
-                                +{post.tags.length - 3}
+                                {post.category}
                               </Badge>
-                            )}
-                          </div>
-                          <div className="flex items-center text-primary font-medium text-sm">
-                            Read more <ArrowRight className="h-3 w-3 ml-1" />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
+                              <div className="flex items-center gap-2">
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                  <Clock className="h-3 w-3 mr-1" />
+                                  <span>{post.readTime} min</span>
+                                </div>
+                                <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                              </div>
+                            </div>
+                            <CardTitle className="text-lg sm:text-xl font-semibold mb-2 line-clamp-2">
+                              {post.title}
+                            </CardTitle>
+                            <div className="flex items-center justify-between text-sm text-muted-foreground">
+                              <div className="flex items-center">
+                                <Calendar className="h-4 w-4 mr-1" />
+                                <span>
+                                  {new Date(post.date).toLocaleDateString()}
+                                </span>
+                              </div>
+                              {post.source && (
+                                <Badge variant="outline" className="text-xs">
+                                  {post.source}
+                                </Badge>
+                              )}
+                            </div>
+                          </CardHeader>
+                          <CardContent className="flex-1">
+                            <p className="text-muted-foreground mb-4 line-clamp-3">
+                              {post.description}
+                            </p>
+                            <div className="flex flex-wrap gap-1 mb-4">
+                              {post.tags.slice(0, 3).map((tag) => (
+                                <Badge
+                                  key={tag}
+                                  variant="outline"
+                                  className="text-xs"
+                                >
+                                  <Tag className="h-2 w-2 mr-1" />
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                            <div className="flex items-center text-primary font-medium text-sm">
+                              Read more <ArrowRight className="h-3 w-3 ml-1" />
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </a>
+                    ) : (
+                      <Link href={`/blog/${post.slug}`}>
+                        <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-300">
+                          <CardHeader>
+                            <div className="flex items-center justify-between mb-2">
+                              <Badge variant="outline" className="text-xs">
+                                {post.category}
+                              </Badge>
+                              <div className="flex items-center text-sm text-muted-foreground">
+                                <Clock className="h-3 w-3 mr-1" />
+                                <span>{post.readTime} min</span>
+                              </div>
+                            </div>
+                            <CardTitle className="text-lg sm:text-xl font-semibold mb-2 line-clamp-2">
+                              {post.title}
+                            </CardTitle>
+                            <div className="flex items-center text-sm text-muted-foreground">
+                              <Calendar className="h-4 w-4 mr-1" />
+                              <span>
+                                {new Date(post.date).toLocaleDateString()}
+                              </span>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="flex-1">
+                            <p className="text-muted-foreground mb-4 line-clamp-3">
+                              {post.description}
+                            </p>
+                            <div className="flex flex-wrap gap-1 mb-4">
+                              {post.tags.slice(0, 3).map((tag) => (
+                                <Badge
+                                  key={tag}
+                                  variant="outline"
+                                  className="text-xs"
+                                >
+                                  <Tag className="h-2 w-2 mr-1" />
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                            <div className="flex items-center text-primary font-medium text-sm">
+                              Read more <ArrowRight className="h-3 w-3 ml-1" />
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    )}
                   </FloatingCard>
                 ))}
               </div>
-            ) : (
+            ) : !loading && (
               <div className="text-center py-12">
-                <p className="text-lg text-muted-foreground mb-4">
+                <p className="text-muted-foreground text-lg">
                   No articles found matching your criteria.
                 </p>
                 <Button
-                  variant="outline"
                   onClick={() => {
                     setSearchQuery("");
                     setSelectedCategory("All");
                     setCurrentPage(1);
                   }}
+                  variant="outline"
+                  className="mt-4"
                 >
-                  Clear filters
+                  Clear Filters
                 </Button>
               </div>
             )}
@@ -458,8 +681,8 @@ export default function BlogPage() {
         {/* Pagination */}
         {totalPages > 1 && (
           <AnimatedSection delay={0.6}>
-            <Section className="text-center">
-              <div className="flex justify-center items-center gap-2 flex-wrap">
+            <Section className="flex justify-center">
+              <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
@@ -467,34 +690,39 @@ export default function BlogPage() {
                 >
                   Previous
                 </Button>
-
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      onClick={() => setCurrentPage(page)}
-                      className="w-10 h-10"
-                    >
-                      {page}
-                    </Button>
-                  )
-                )}
+                
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(page => 
+                      page === 1 || 
+                      page === totalPages || 
+                      Math.abs(page - currentPage) <= 1
+                    )
+                    .map((page, index, array) => (
+                      <div key={page} className="flex items-center">
+                        {index > 0 && array[index - 1] !== page - 1 && (
+                          <span className="px-2 text-muted-foreground">...</span>
+                        )}
+                        <Button
+                          variant={currentPage === page ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setCurrentPage(page)}
+                          className="w-10"
+                        >
+                          {page}
+                        </Button>
+                      </div>
+                    ))}
+                </div>
 
                 <Button
                   variant="outline"
-                  onClick={() =>
-                    setCurrentPage(Math.min(totalPages, currentPage + 1))
-                  }
+                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
                 >
                   Next
                 </Button>
               </div>
-
-              <p className="text-sm text-muted-foreground mt-4">
-                Page {currentPage} of {totalPages}
-              </p>
             </Section>
           </AnimatedSection>
         )}
@@ -502,3 +730,4 @@ export default function BlogPage() {
     </div>
   );
 }
+

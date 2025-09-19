@@ -177,7 +177,7 @@ export const certifications: Certification[] = [
     name: "Advanced CSS and Sass: Flexbox, Grid, Animations and More!",
     issuer: "Udemy",
     year: "2023",
-    url: "https://ude.my/UC-8cb8b128-afe5-4ec0-9866-a996b0594406",
+    url: "https://ude.my/UC-8cb8b128-afe5-4ec0-98b6-a996b0594406",
   },
   {
     name: "Build Responsive Real-World Websites with HTML and CSS",
