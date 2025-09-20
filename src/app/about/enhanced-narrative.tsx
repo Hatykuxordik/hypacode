@@ -27,7 +27,7 @@ export function EnhancedNarrative() {
             </div>
 
             <div className="prose prose-gray dark:prose-invert max-w-none">
-              <p className="text-xl text-muted-foreground leading-relaxed mb-6">
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                 My path to frontend development began during my biochemistry
                 studies at Obafemi Awolowo University. In my 200 level, I took a
                 Python programming course (CSS 201). Starting with the basics of
@@ -39,7 +39,7 @@ export function EnhancedNarrative() {
                 imagined.
               </p>
 
-              <p className="text-xl text-muted-foreground leading-relaxed mb-6">
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                 Driven by curiosity and a love for creativity—especially from my
                 background in graphic design—I shifted into web development. I
                 began with YouTube tutorials, learning the fundamentals of HTML
@@ -51,7 +51,7 @@ export function EnhancedNarrative() {
                 in building scalable, responsive applications.
               </p>
 
-              <p className="text-xl text-muted-foreground leading-relaxed mb-6">
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                 What drives me most is the intersection of aesthetics and
                 functionality. I believe that great user interfaces should feel
                 intuitive, perform flawlessly, and solve real problems. Every
@@ -59,7 +59,7 @@ export function EnhancedNarrative() {
                 should enhance human experiences, not complicate them.
               </p>
 
-              <p className="text-xl text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Today, I approach each project with the same scientific rigor I
                 learned in biochemistry—hypothesis, experimentation, analysis,
                 and iteration. This methodology has helped me deliver solutions
@@ -236,7 +236,7 @@ export function EnhancedNarrative() {
             </div>
 
             <div className="prose prose-gray dark:prose-invert max-w-none">
-              <p className="text-xl text-muted-foreground leading-relaxed mb-6">
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                 The frontend development landscape evolves rapidly, and I've
                 made continuous learning a cornerstone of my professional
                 practice. I dedicate at least 5 hours weekly to exploring new
@@ -244,7 +244,7 @@ export function EnhancedNarrative() {
                 open-source projects.
               </p>
 
-              <p className="text-xl text-muted-foreground leading-relaxed mb-6">
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                 My learning approach combines theoretical understanding with
                 practical application. When I encounter a new framework or tool,
                 I don't just read the documentation—I build real projects that
@@ -253,7 +253,7 @@ export function EnhancedNarrative() {
                 industry best practices.
               </p>
 
-              <p className="text-xl text-muted-foreground leading-relaxed mb-6">
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                 I'm particularly excited about the intersection of AI and
                 frontend development. I've been experimenting with AI-powered
                 development tools, exploring how machine learning can enhance
