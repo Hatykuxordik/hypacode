@@ -77,7 +77,7 @@ export const projects = [
       "OpenWeatherMap API",
       "Exchange Rates API",
     ],
-    liveUrl: "https://globalfinder-demo.hypacode.com",
+    liveUrl: "https://global-finder.vercel.app/",
     githubUrl: "https://github.com/hatykuxordik/global-finder",
     featured: true,
     category: "Personal Web App Blog Api",
