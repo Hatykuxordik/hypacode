@@ -52,6 +52,31 @@ export interface ValueItem {
 
 export const experiences: Experience[] = [
   {
+    title: "Frontend Engineer",
+    company: "Villeto",
+    location: "Remote",
+    period: "2026 – Present",
+    description:
+      "Building and maintaining scalable, high-performance user interfaces for Villeto’s spend management platform. Working closely with product, backend, and design teams to deliver secure, intuitive, and production-grade financial workflows.",
+    achievements: [
+      "Implemented responsive dashboards and complex UI flows for business onboarding, cards, expenses, and vendor management",
+      "Integrated REST APIs for authentication, business profiles, and spend management using production-ready error handling",
+      "Built reusable UI components with shadcn/ui and Tailwind CSS, improving design consistency and development speed",
+      "Optimized application performance with code-splitting, memoization, and controlled re-renders in React",
+      "Collaborated with backend engineers to align API contracts and handle edge cases across financial workflows",
+      "Improved UX on mobile and tablet devices with adaptive layouts and accessibility-focused components",
+    ],
+    technologies: [
+      "React.js",
+      "Next.js (App Router)",
+      "TypeScript",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Zustand",
+      "REST APIs",
+    ],
+  },
+  {
     title: "Frontend Developer",
     company: "Freelance / Personal Projects",
     location: "Remote",
@@ -74,29 +99,29 @@ export const experiences: Experience[] = [
       "Supabase",
     ],
   },
-  {
-    title: "Web Developer",
-    company: "Self-Employed",
-    location: "Ile-Ife, Nigeria",
-    period: "07/2024 – 12/2024",
-    description:
-      "Delivered websites for small businesses, focusing on responsive design, performance optimization, and interactive user experiences.",
-    achievements: [
-      "Developed 3+ landing pages and marketing websites using HTML5, CSS3, JavaScript, and Tailwind",
-      "Translated Figma designs into responsive, cross-browser compatible web pages",
-      "Optimized CSS payloads and layout rendering, improving mobile performance by 30%",
-      "Integrated forms with Formspree and added smooth GSAP animations",
-      "Participated in code reviews and strengthened Git/GitHub workflows",
-    ],
-    technologies: [
-      "HTML5",
-      "CSS3",
-      "JavaScript",
-      "Tailwind CSS",
-      "GSAP",
-      "Git/GitHub",
-    ],
-  },
+  // {
+  //   title: "Web Developer",
+  //   company: "Self-Employed",
+  //   location: "Ile-Ife, Nigeria",
+  //   period: "07/2024 – 12/2024",
+  //   description:
+  //     "Delivered websites for small businesses, focusing on responsive design, performance optimization, and interactive user experiences.",
+  //   achievements: [
+  //     "Developed 3+ landing pages and marketing websites using HTML5, CSS3, JavaScript, and Tailwind",
+  //     "Translated Figma designs into responsive, cross-browser compatible web pages",
+  //     "Optimized CSS payloads and layout rendering, improving mobile performance by 30%",
+  //     "Integrated forms with Formspree and added smooth GSAP animations",
+  //     "Participated in code reviews and strengthened Git/GitHub workflows",
+  //   ],
+  //   technologies: [
+  //     "HTML5",
+  //     "CSS3",
+  //     "JavaScript",
+  //     "Tailwind CSS",
+  //     "GSAP",
+  //     "Git/GitHub",
+  //   ],
+  // },
   {
     title: "Frontend Engineer (React + Firebase)",
     company: "Independent Project Work",

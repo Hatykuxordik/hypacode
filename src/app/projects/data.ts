@@ -1,49 +1,32 @@
 export const projects = [
   {
     id: 1,
-    title: "E-commerce Platform",
+    title: "Villeto",
     description:
-      "A full-featured e-commerce platform with user authentication, payment processing, inventory management, and admin dashboard. Built with Next.js, TypeScript, and Stripe integration.",
+      "A modern fintech web application that helps businesses manage expenses, corporate cards, vendors, and financial workflows from a single dashboard.",
     longDescription:
-      "This comprehensive e-commerce solution provides a seamless shopping experience with advanced features like real-time inventory management, personalized recommendations, and multi-payment gateway integration. Built with performance and scalability in mind.",
-    image: "/",
+      "Villeto is a full-scale spend management platform built to give businesses real-time visibility and control over their finances. The application supports secure business onboarding, role-based access, expense tracking, vendor management, and card operations. The frontend is optimized for performance, accessibility, and scalability, with reusable UI components and seamless API integrations powering complex financial workflows.",
+    image: "/assets/projects/villeto.png",
     tags: [
       "Next.js",
+      "React",
       "TypeScript",
-      "Stripe",
-      "Prisma",
-      "PostgreSQL",
       "Tailwind CSS",
+      "shadcn/ui",
+      "Zustand",
+      "REST APIs",
     ],
-    liveUrl: "https://ecommerce-demo.hypacode.com",
-    githubUrl: "https://github.com/hatykuxordik/ecommerce-platform",
+    liveUrl: "https://villeto.com",
+    githubUrl: "", // private proprietary codebase
     featured: true,
-    category: "Full Stack",
-    stars: 45,
-    forks: 12,
-    date: "2024-01-15",
-    status: "Completed",
+    category: "Fintech / Frontend",
+    stars: null,
+    forks: null,
+    date: "2026-01-10",
+    status: "In Progress",
   },
   {
     id: 2,
-    title: "SaaS Analytics Dashboard",
-    description:
-      "Comprehensive analytics dashboard with real-time data visualization, user management, and subscription handling. Features interactive charts and responsive design.",
-    longDescription:
-      "Built for modern teams, this application offers intuitive project management with drag-and-drop functionality, real-time collaboration, time tracking, and comprehensive reporting features.",
-    image: "/api/placeholder/600/400",
-    tags: ["React", "D3.js", "Node.js", "MongoDB", "Socket.io", "Chart.js"],
-    liveUrl: "https://analytics-demo.hypacode.com",
-    githubUrl: "https://github.com/hatykuxordik/saas-dashboard",
-    featured: true,
-    category: "SaaS",
-    stars: 32,
-    forks: 8,
-    date: "2024-02-20",
-    status: "Completed",
-  },
-  {
-    id: 3,
     title: "Taskify",
     description:
       "A modern, full-featured task management and note-taking application built with Next.js 14+, Supabase, and TypeScript. Taskify combines powerful todo list functionality with rich note-taking capabilities in a beautiful, responsive interface.",
@@ -61,7 +44,7 @@ export const projects = [
     status: "Completed",
   },
   {
-    id: 4,
+    id: 3,
     title: "Global Finder",
     description:
       "A comprehensive, modern web application built with Next.js 15 that provides detailed information about countries worldwide, including real-time weather data, currency conversion, interactive comparisons, and more.",
@@ -87,7 +70,7 @@ export const projects = [
     status: "Completed",
   },
   {
-    id: 5,
+    id: 4,
     title: "Wild Oasis",
     description:
       "A premium cabin-rental showcase website developed. Designed to present immersive cabin experiences with intuitive booking and rustic elegance.",
@@ -111,7 +94,7 @@ export const projects = [
     status: "In Progress",
   },
   {
-    id: 6,
+    id: 5,
     title: "Fastpay",
     description:
       "A modern banking simulator built with Next.js, Supabase, and TypeScript. Fastpay offers secure authentication, instant money transfers, real-time analytics, and advanced banking operations in a sleek, responsive interface.",
@@ -136,7 +119,7 @@ export const projects = [
     status: "In Progress",
   },
   {
-    id: 7,
+    id: 6,
     title: "GameSnap",
     description:
       "Production-ready live sports scores & predictions platform built with Next.js 15+, TypeScript, and React Query—combining features from Scores24, SofaScore, Soccer24, and FlashScore.",
@@ -158,7 +141,7 @@ export const projects = [
 
     liveUrl: "https://gamesnap.example.com",
     githubUrl: "https://github.com/hatykuxordik/gamesnap",
-    featured: true,
+    featured: false,
     category: "Web Application Api",
     stars: 1,
     forks: 1,
@@ -166,8 +149,8 @@ export const projects = [
     status: "In Progress",
   },
   {
-    id: 8,
-    title: "HypaCode Portfolio",
+    id: 7,
+    title: "Hypacode Portfolio",
     description:
       "A sleek, modern portfolio website built with Next.js, showcasing a collection of web development projects with a focus on clean design, smooth animations, and responsive layouts.",
     longDescription:
@@ -189,6 +172,31 @@ export const projects = [
     stars: 2,
     forks: 0,
     date: "2025-06-10",
+    status: "Completed",
+  },
+  {
+    id: 8,
+    title: "E-commerce Platform",
+    description:
+      "A full-featured e-commerce platform with user authentication, payment processing, inventory management, and admin dashboard. Built with Next.js, TypeScript, and Stripe integration.",
+    longDescription:
+      "This comprehensive e-commerce solution provides a seamless shopping experience with advanced features like real-time inventory management, personalized recommendations, and multi-payment gateway integration. Built with performance and scalability in mind.",
+    image: "/",
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Stripe",
+      "Prisma",
+      "PostgreSQL",
+      "Tailwind CSS",
+    ],
+    liveUrl: "https://ecommerce-demo.hypacode.com",
+    githubUrl: "https://github.com/hatykuxordik/ecommerce-platform",
+    featured: false,
+    category: "Full Stack",
+    stars: 45,
+    forks: 12,
+    date: "2024-01-15",
     status: "Completed",
   },
 ];
