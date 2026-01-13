@@ -55,7 +55,7 @@ export const experiences: Experience[] = [
     title: "Frontend Engineer",
     company: "Villeto",
     location: "Remote",
-    period: "2026 – Present",
+    period: "01/2026 – Present",
     description:
       "Building and maintaining scalable, high-performance user interfaces for Villeto’s spend management platform. Working closely with product, backend, and design teams to deliver secure, intuitive, and production-grade financial workflows.",
     achievements: [
