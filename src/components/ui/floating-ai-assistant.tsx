@@ -55,7 +55,7 @@ export function FloatingAIAssistant() {
       id: "1",
       type: "ai",
       content:
-        "Hi! I'm Hypacode's AI assistant. Ask me about projects, technologies, or anything you'd like to know 🚀",
+        "Hi! I'm Hypacode's AI assistant. Ask me about projects, technologies, or anything you'd like to know! 🚀",
       timestamp: new Date(),
     },
   ]);
